@@ -1,0 +1,40 @@
+name: Deploy to Windows Server
+
+# Action ini berjalan otomatis ketika ada "git push" baru ke branch main.
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    # "self-hosted" memberitahu GitHub untuk menjalankan tugas ini di Windows Server Anda, bukan di sistem GitHub.
+    runs-on: self-hosted
+
+    steps:
+      # Step 1: Tarik kode (Pull / Checkout) dari Repo
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Step 2: Hapus cache sebelumnya dan update kontainer
+      - name: Update Docker Containers and App
+        # Perintah CMD / PowerShell yang akan dijalankan di dalam server Windows.
+        # Sesuaikan absolute path-nya dengan letak folder abdinara-lms-2 Anda yang ada di Server.
+        run: |
+          cd C:\Users\Administrator\Documents\abdinara-lms-2
+          git pull origin main
+          
+          echo "Memulai restart dan instalasi dependency..."
+          docker compose exec -T app composer install --no-interaction --prefer-dist --optimize-autoloader
+          
+          echo "Membersihkan Cache Laravel..."
+          docker compose exec -T app php artisan optimize:clear
+          docker compose exec -T app php artisan view:clear
+          
+          # Jika laravel octane / swoole butuh di relod agar merender kode baru
+          docker compose exec -T app php artisan octane:reload
+          
+          echo "Migrasi database jika ada yang baru..."
+          docker compose exec -T app php artisan migrate --force
+          
+          echo "Aplikasi berhasil diperbarui di server!"
