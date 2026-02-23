@@ -21,7 +21,7 @@ jobs:
         # Perintah CMD / PowerShell yang akan dijalankan di dalam server Windows.
         # Sesuaikan absolute path-nya dengan letak folder abdinara-lms-2 Anda yang ada di Server.
         run: |
-          cd C:\Users\Administrator\Documents\abdinara-lms-2
+          cd C:\Users\iam\Documents\abdinara.id\lms-2\abdinara-lms-2
           git pull origin main
           
           echo "Memulai restart dan instalasi dependency..."
