@@ -1,0 +1,80 @@
+/* Dark Mode Patch */
+[data-bs-theme="dark"] body.lms-body,
+[data-bs-theme="dark"] body {
+    background: #0f172a !important;
+    background-image: none !important;
+    color: #f1f5f9 !important;
+}
+
+[data-bs-theme="dark"] .site-header,
+[data-bs-theme="dark"] .dash-nav {
+    background: rgba(15, 23, 42, 0.95) !important;
+    border-color: #1e293b !important;
+}
+
+[data-bs-theme="dark"] .dash-mobile {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+}
+
+[data-bs-theme="dark"] .card,
+[data-bs-theme="dark"] .panel,
+[data-bs-theme="dark"] .dash-panel,
+[data-bs-theme="dark"] .dash-card {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+    color: #f1f5f9 !important;
+}
+
+[data-bs-theme="dark"] .text-dark,
+[data-bs-theme="dark"] .text-body {
+    color: #f1f5f9 !important;
+}
+
+[data-bs-theme="dark"] .text-secondary,
+[data-bs-theme="dark"] .text-muted,
+[data-bs-theme="dark"] .text-body-secondary {
+    color: #94a3b8 !important;
+}
+
+[data-bs-theme="dark"] .bg-white {
+    background-color: #1e293b !important;
+}
+
+[data-bs-theme="dark"] .bg-light {
+    background-color: #0f172a !important;
+}
+
+[data-bs-theme="dark"] .table {
+    --bs-table-bg: transparent !important;
+    --bs-table-color: #f1f5f9 !important;
+    --bs-table-border-color: #334155 !important;
+}
+
+/* Activity Map Theme-Aware Colors */
+:root {
+    --activity-bg: #ffffff;
+    --activity-lvl-0: #f1f5f9;
+    --activity-lvl-1: #dcfce7;
+    --activity-lvl-2: #86efac;
+    --activity-lvl-3: #22c55e;
+    --activity-lvl-4: #15803d;
+}
+
+[data-bs-theme="dark"] {
+    --activity-bg: #1e293b;
+    --activity-lvl-0: #0f172a;
+    --activity-lvl-1: #0e4429;
+    --activity-lvl-2: #006d32;
+    --activity-lvl-3: #26a641;
+    --activity-lvl-4: #39d353;
+}
+
+.activity-card {
+    background-color: var(--activity-bg) !important;
+}
+
+[data-bs-theme="dark"] .dash-nav-links a.active {
+    background: #334155 !important;
+    color: #60a5fa !important;
+}
