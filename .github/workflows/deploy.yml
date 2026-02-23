@@ -16,24 +16,21 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # Step 2: Hapus cache sebelumnya dan update kontainer
+      # Step 2: Update Server
       - name: Update Docker Containers and App
         shell: cmd
         run: |
           cd C:\Users\iam\Documents\abdinara.id\abdinara-lms
           git pull origin main
           
-          echo "Memulai restart dan instalasi dependency..."
-          docker compose exec -T app composer install --no-interaction --prefer-dist --optimize-autoloader
+          echo "Membangun ulang container dengan versi terbaru..."
+          docker compose up -d --build app
           
           echo "Membersihkan Cache Laravel..."
           docker compose exec -T app php artisan optimize:clear
           docker compose exec -T app php artisan view:clear
           
-          REM Jika laravel octane / swoole butuh di relod agar merender kode baru
-          docker compose exec -T app php artisan octane:reload
-          
-          echo "Migrasi database jika ada yang baru..."
+          echo "Menjalankan migrasi database..."
           docker compose exec -T app php artisan migrate --force
           
           echo "Aplikasi berhasil diperbarui di server!"

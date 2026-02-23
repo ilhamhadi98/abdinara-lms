@@ -1,3 +1,12 @@
+# Node dependencies stage for building Vite assets
+FROM node:20 AS node_builder
+WORKDIR /app
+COPY package.json package-lock.json* ./
+RUN npm install
+COPY . .
+RUN npm run build
+
+# PHP App stage
 FROM php:8.4-cli
 
 # Install system dependencies + PHP extensions
@@ -43,15 +52,18 @@ WORKDIR /var/www/html
 # (vendor/, node_modules/, storage/logs/, bootstrap/cache/ sudah di-.dockerignore)
 COPY . .
 
-# Install PHP dependencies di dalam container (Linux filesystem = cepat!)
+# Instal PHP dependencies
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader --no-scripts
 
-# Buat direktori storage yang dibutuhkan (tidak semua ter-copy karena di .dockerignore)
+# Salin pre-compiled Vite assets dari stage pertama Node.js
+COPY --from=node_builder /app/public/build /var/www/html/public/build
+
+# Buat direktori storage 
 RUN mkdir -p storage/logs \
     storage/framework/cache/data \
     storage/framework/sessions \
     storage/framework/views \
     bootstrap/cache \
-    && chmod -R 777 storage bootstrap/cache
+    && chmod -R 777 storage bootstrap/cache public/build
 
 EXPOSE 8000
