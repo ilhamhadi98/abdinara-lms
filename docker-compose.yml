@@ -46,5 +46,15 @@ services:
       timeout: 5s
       retries: 20
 
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: abdinara_lms_cloudflared
+    restart: unless-stopped
+    command: tunnel run
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN:-}
+    depends_on:
+      - app
+
 volumes:
   mysql_data:
