@@ -24,7 +24,7 @@ jobs:
           git pull origin main
           
           echo "Membangun ulang container dengan versi terbaru..."
-          docker compose up -d --build app
+          docker compose up -d --build
           
           echo "Membersihkan Cache Laravel..."
           docker compose exec -T app php artisan optimize:clear
