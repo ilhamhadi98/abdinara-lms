@@ -20,7 +20,7 @@ jobs:
       - name: Update Docker Containers and App
         shell: cmd
         run: |
-          cd C:\Users\iam\Documents\abdinara.id\lms-2\abdinara-lms-2
+          cd C:\Users\ilham\Documents\abdinara.id\lms-2\abdinara-lms-2
           git pull origin main
           
           echo "Memulai restart dan instalasi dependency..."
@@ -30,7 +30,7 @@ jobs:
           docker compose exec -T app php artisan optimize:clear
           docker compose exec -T app php artisan view:clear
           
-          # Jika laravel octane / swoole butuh di relod agar merender kode baru
+          REM Jika laravel octane / swoole butuh di relod agar merender kode baru
           docker compose exec -T app php artisan octane:reload
           
           echo "Migrasi database jika ada yang baru..."
