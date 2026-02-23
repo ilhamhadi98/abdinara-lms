@@ -20,7 +20,7 @@ jobs:
       - name: Update Docker Containers and App
         shell: cmd
         run: |
-          cd C:\Users\ilham\Documents\abdinara.id\lms-2\abdinara-lms-2
+          cd C:\Users\iam\Documents\abdinara.id\abdinara-lms
           git pull origin main
           
           echo "Memulai restart dan instalasi dependency..."
