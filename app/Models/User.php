@@ -23,6 +23,7 @@ class User extends Authenticatable implements FilamentUser
         'email',
         'password',
         'subscription_expires_at',
+        'telegram_chat_id',
     ];
 
     protected $hidden = [
@@ -47,6 +48,11 @@ class User extends Authenticatable implements FilamentUser
     public function transactions()
     {
         return $this->hasMany(Transaction::class);
+    }
+
+    public function otpLogs()
+    {
+        return $this->hasMany(OtpLog::class);
     }
 
     public function isSubscribed(): bool
