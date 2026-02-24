@@ -27,19 +27,29 @@ class QuestionResource extends Resource
     protected static ?string $modelLabel = 'Soal';
     protected static ?int $navigationSort = 2;
 
-    public static function canAccess(): bool
+    public static function canViewAny(): bool
     {
-        return auth()->user()?->hasAnyRole(['admin', 'super-admin', 'admin-full', 'admin-soal']) ?? false;
+        return auth()->user()?->hasPermissionTo('view_any_question') ?? false;
+    }
+
+    public static function canCreate(): bool
+    {
+        return auth()->user()?->hasPermissionTo('create_question') ?? false;
+    }
+
+    public static function canEdit(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return auth()->user()?->hasPermissionTo('update_question') ?? false;
     }
 
     public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
     {
-        return auth()->user()?->hasAnyRole(['super-admin', 'admin']);
+        return auth()->user()?->hasPermissionTo('delete_question') ?? false;
     }
 
     public static function canDeleteAny(): bool
     {
-        return auth()->user()?->hasAnyRole(['super-admin', 'admin']);
+        return auth()->user()?->hasPermissionTo('delete_any_question') ?? false;
     }
 
     public static function form(Form $form): Form

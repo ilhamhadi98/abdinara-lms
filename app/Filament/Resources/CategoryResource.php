@@ -21,19 +21,29 @@ class CategoryResource extends Resource
     protected static ?string $modelLabel = 'Kategori';
     protected static ?int $navigationSort = 1;
 
-    public static function canAccess(): bool
+    public static function canViewAny(): bool
     {
-        return auth()->user()?->hasAnyRole(['admin', 'super-admin', 'admin-full', 'admin-soal']) ?? false;
+        return auth()->user()?->hasPermissionTo('view_any_category') ?? false;
+    }
+
+    public static function canCreate(): bool
+    {
+        return auth()->user()?->hasPermissionTo('create_category') ?? false;
+    }
+
+    public static function canEdit(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return auth()->user()?->hasPermissionTo('update_category') ?? false;
     }
 
     public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
     {
-        return auth()->user()?->hasAnyRole(['super-admin', 'admin']);
+        return auth()->user()?->hasPermissionTo('delete_category') ?? false;
     }
 
     public static function canDeleteAny(): bool
     {
-        return auth()->user()?->hasAnyRole(['super-admin', 'admin']);
+        return auth()->user()?->hasPermissionTo('delete_any_category') ?? false;
     }
 
     public static function form(Form $form): Form

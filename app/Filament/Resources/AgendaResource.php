@@ -18,22 +18,31 @@ class AgendaResource extends Resource
     protected static ?string $model = Agenda::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-calendar';
-
     protected static ?string $navigationGroup = 'Manajemen Konten Website';
 
-    public static function canAccess(): bool
+    public static function canViewAny(): bool
     {
-        return auth()->user()?->hasAnyRole(['super-admin', 'admin-full', 'admin-content']) ?? false;
+        return auth()->user()?->hasPermissionTo('view_any_agenda') ?? false;
+    }
+
+    public static function canCreate(): bool
+    {
+        return auth()->user()?->hasPermissionTo('create_agenda') ?? false;
+    }
+
+    public static function canEdit(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return auth()->user()?->hasPermissionTo('update_agenda') ?? false;
     }
 
     public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
     {
-        return auth()->user()?->hasAnyRole(['super-admin']);
+        return auth()->user()?->hasPermissionTo('delete_agenda') ?? false;
     }
 
     public static function canDeleteAny(): bool
     {
-        return auth()->user()?->hasAnyRole(['super-admin']);
+        return auth()->user()?->hasPermissionTo('delete_any_agenda') ?? false;
     }
 
     public static function form(Form $form): Form

@@ -20,19 +20,29 @@ class TryoutResource extends Resource
     protected static ?string $modelLabel = 'Tryout';
     protected static ?int $navigationSort = 3;
 
-    public static function canAccess(): bool
+    public static function canViewAny(): bool
     {
-        return auth()->user()?->hasAnyRole(['admin', 'super-admin', 'admin-full', 'admin-soal']) ?? false;
+        return auth()->user()?->hasPermissionTo('view_any_tryout') ?? false;
+    }
+
+    public static function canCreate(): bool
+    {
+        return auth()->user()?->hasPermissionTo('create_tryout') ?? false;
+    }
+
+    public static function canEdit(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return auth()->user()?->hasPermissionTo('update_tryout') ?? false;
     }
 
     public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
     {
-        return auth()->user()?->hasAnyRole(['super-admin', 'admin']);
+        return auth()->user()?->hasPermissionTo('delete_tryout') ?? false;
     }
 
     public static function canDeleteAny(): bool
     {
-        return auth()->user()?->hasAnyRole(['super-admin', 'admin']);
+        return auth()->user()?->hasPermissionTo('delete_any_tryout') ?? false;
     }
 
     public static function form(Form $form): Form

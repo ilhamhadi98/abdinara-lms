@@ -22,19 +22,29 @@ class TransactionResource extends Resource
     protected static ?string $navigationLabel = 'Transaksi Midtrans';
     protected static ?string $pluralModelLabel = 'Transaksi';
 
-    public static function canAccess(): bool
+    public static function canViewAny(): bool
     {
-        return auth()->user()?->hasAnyRole(['super-admin', 'admin-full', 'admin-finance']) ?? false;
+        return auth()->user()?->hasPermissionTo('view_any_transaction') ?? false;
+    }
+
+    public static function canCreate(): bool
+    {
+        return auth()->user()?->hasPermissionTo('create_transaction') ?? false;
+    }
+
+    public static function canEdit(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return auth()->user()?->hasPermissionTo('update_transaction') ?? false;
     }
 
     public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
     {
-        return auth()->user()?->hasAnyRole(['super-admin']);
+        return auth()->user()?->hasPermissionTo('delete_transaction') ?? false;
     }
 
     public static function canDeleteAny(): bool
     {
-        return auth()->user()?->hasAnyRole(['super-admin']);
+        return auth()->user()?->hasPermissionTo('delete_any_transaction') ?? false;
     }
 
     public static function form(Form $form): Form
