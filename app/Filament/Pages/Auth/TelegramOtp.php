@@ -32,7 +32,7 @@ class TelegramOtp extends SimplePage
     public function mount()
     {
         $user = auth()->user();
-        if (!$user || !in_array('admin', $user->getRoleNames()->toArray()) && !in_array('super-admin', $user->getRoleNames()->toArray())) {
+        if (!$user || !$user->hasAnyRole(['admin', 'super-admin', 'admin-soal', 'admin-content', 'admin-finance', 'admin-full'])) {
             return redirect('/');
         }
         if (!$user->telegram_chat_id) {

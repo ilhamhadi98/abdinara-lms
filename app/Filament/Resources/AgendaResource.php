@@ -21,6 +21,21 @@ class AgendaResource extends Resource
 
     protected static ?string $navigationGroup = 'Manajemen Konten Website';
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()?->hasAnyRole(['super-admin', 'admin-full', 'admin-content']) ?? false;
+    }
+
+    public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return auth()->user()?->hasAnyRole(['super-admin']);
+    }
+
+    public static function canDeleteAny(): bool
+    {
+        return auth()->user()?->hasAnyRole(['super-admin']);
+    }
+
     public static function form(Form $form): Form
     {
         return $form

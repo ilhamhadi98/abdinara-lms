@@ -24,6 +24,21 @@ class UserTargetResource extends Resource
 
     protected static ?string $navigationLabel = 'Target Pengguna';
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()?->hasAnyRole(['admin', 'super-admin', 'admin-full']) ?? false;
+    }
+
+    public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return auth()->user()?->hasAnyRole(['super-admin', 'admin']);
+    }
+
+    public static function canDeleteAny(): bool
+    {
+        return auth()->user()?->hasAnyRole(['super-admin', 'admin']);
+    }
+
     public static function form(Form $form): Form
     {
         return $form
