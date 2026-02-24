@@ -55,7 +55,8 @@ class TelegramOtp extends SimplePage
         } else {
             $otpData = Cache::get($cacheKey);
             $this->expiresAt = $otpData['expires_at'];
-            $this->timeLeft = Carbon::parse($this->expiresAt)->diffInSeconds(now());
+            $diff = now()->diffInSeconds(\Carbon\Carbon::parse($this->expiresAt), false);
+            $this->timeLeft = max(0, (int) $diff);
         }
     }
 
@@ -89,7 +90,8 @@ class TelegramOtp extends SimplePage
 
     public function updateTimer()
     {
-        // just to trigger livewire re-render
+        $diff = now()->diffInSeconds(\Carbon\Carbon::parse($this->expiresAt), false);
+        $this->timeLeft = max(0, (int) $diff);
     }
 
     public function resendOtp()
