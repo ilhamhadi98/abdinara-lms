@@ -34,7 +34,7 @@
         <section id="beranda" class="hero">
             <div class="container hero-grid">
                 <div>
-                    <p class="eyebrow">LMS Starter</p>
+                    <p class="eyebrow">Platform Belajar Resmi Abdinara</p>
                     <h1>Wujudkan Mimpi Mengabdi pada Negara</h1>
                     <p class="lead">Platform persiapan seleksi TNI, Polri, Sekolah Kedinasan, dan CPNS dengan
                         pengalaman belajar terstruktur.</p>
@@ -66,8 +66,9 @@
                     <h2>Tentang Abdinara.id</h2>
                     <p>Abdinara.id membantu putra-putri terbaik bangsa mempersiapkan diri menuju karir pengabdian
                         melalui pembelajaran akademik, mental, dan strategi ujian.</p>
-                    <p>Layout ini disiapkan sebagai fondasi LMS, sehingga tahap berikutnya bisa langsung fokus ke modul
-                        kelas, quiz, jadwal, dan progres siswa.</p>
+                    <p>Sistem Manajemen Pembelajaran (LMS) kami dirancang khusus dengan teknologi terkini untuk
+                        memberikan pengalaman simulasi ujian CAT (Computer Assisted Test) yang paling otentik. Lacak
+                        progres belajar Anda dengan mudah dan akurat melalui dashboard interaktif.</p>
                 </div>
 
             </div>
@@ -76,7 +77,8 @@
         <section id="program" class="section section-soft">
             <div class="container">
                 <h2>Program Unggulan</h2>
-                <p class="sub">Meniru struktur situs utama: program utama CAT + program tambahan.</p>
+                <p class="sub">Kami menyediakan fasilitas dan modul lengkap untuk menunjang kesuksesan belajar Anda
+                    secara maksimal.</p>
                 <div class="cards">
                     <article class="card card-featured">
                         <p class="badge">Unggulan</p>
@@ -140,7 +142,7 @@
     <footer class="site-footer">
         <div class="container footer-wrap">
             <p>@ {{ date('Y') }} Abdinara LMS</p>
-            <p>Starter layout inspired by abdinara.id</p>
+            <p>Hak Cipta Dilindungi Undang-Undang.</p>
         </div>
     </footer>
     <x-pwa-install-prompt />
