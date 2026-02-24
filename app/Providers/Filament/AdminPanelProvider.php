@@ -57,6 +57,9 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
                 \App\Http\Middleware\RequireTelegramOTP::class,
-            ]);
+            ])
+            ->routes(function () {
+                \Illuminate\Support\Facades\Route::get('/auth/telegram-otp', \App\Filament\Pages\Auth\TelegramOtp::class)->name('auth.telegram-otp');
+            });
     }
 }

@@ -40,4 +40,8 @@ return [
         'secret_key' => env('RECAPTCHA_SECRET_KEY'),
     ],
 
+    'telegram' => [
+        'bot_token' => env('TELEGRAM_BOT_TOKEN'),
+    ],
+
 ];

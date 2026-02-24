@@ -17,13 +17,10 @@ class RequireTelegramOTP
     {
         $user = auth()->user();
 
-        // Jika tidak login, atau bukan route admin, biarkan lewat (sudah ditangani middleware auth)
-        if (!$user) {
-            return $next($request);
-        }
+        \Illuminate\Support\Facades\Log::info('RequireTelegramOTP Hit', ['has_user' => (bool)$user, 'route' => $request->route()->getName()]);
 
         // Cek apakah user adalah admin dan punya telegram_chat_id
-        if ($user->telegram_chat_id && !$request->session()->has('otp_verified_at')) {
+        if ($user && $user->telegram_chat_id && !$request->session()->has('otp_verified_at')) {
             // Abaikan pengecekan jika sedang berada di halaman livewire OTP itu sendiri
             if ($request->routeIs('*telegram-otp*') || $request->routeIs('livewire.update')) {
                 return $next($request);
