@@ -30,7 +30,7 @@ class SetupPermissions extends Command
         // Selalu bersihkan cache permission dulu sebelum setup
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
-        $resources = ['agenda', 'announcement', 'module', 'transaction', 'category', 'question', 'tryout', 'usertarget', 'user'];
+        $resources = ['agenda', 'announcement', 'module', 'transaction', 'category', 'question', 'tryout', 'usertarget', 'user', 'subscriptionpackage'];
         $actions = ['view_any', 'create', 'update', 'delete', 'delete_any'];
 
         foreach ($resources as $resource) {
@@ -73,10 +73,11 @@ class SetupPermissions extends Command
             'view_any_module', 'create_module', 'update_module'
         ]);
 
-        // Set hak akses role admin-finance (Transaction) - Tanpa Delete
+        // Set hak akses role admin-finance (Transaction & Subscription Package) - Tanpa Delete
         $adminFinance = Role::findByName('admin-finance');
         $adminFinance->syncPermissions([
-            'view_any_transaction', 'create_transaction', 'update_transaction'
+            'view_any_transaction', 'create_transaction', 'update_transaction',
+            'view_any_subscriptionpackage', 'create_subscriptionpackage', 'update_subscriptionpackage'
         ]);
 
         // Set hak akses role admin-soal (Category, Question, Tryout) - Tanpa Delete
