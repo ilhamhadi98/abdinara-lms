@@ -16,7 +16,7 @@ class SubscriptionPackageResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-star';
 
-    protected static ?string $navigationGroup = 'Keuangan';
+    protected static ?string $navigationGroup = 'Langganan';
 
     protected static ?string $navigationLabel = 'Paket Langganan';
 
