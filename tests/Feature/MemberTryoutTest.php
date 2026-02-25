@@ -80,12 +80,41 @@ class MemberTryoutTest extends TestCase
              ->assertForbidden();
     }
 
+    public function test_member_without_subscription_cannot_access_tryout_list(): void
+    {
+        // by default member factory doesn't have subscription_expires_at set
+        $this->actingAs($this->member)
+             ->get('/tryout')
+             ->assertRedirect(route('subscription.index'))
+             ->assertSessionHas('error');
+    }
+
+    public function test_member_with_expired_subscription_cannot_access_tryout_list(): void
+    {
+        $this->member->update(['subscription_expires_at' => now()->subDays(2)]);
+
+        $this->actingAs($this->member)
+             ->get('/tryout')
+             ->assertRedirect(route('subscription.index'));
+    }
+
+    public function test_subscribed_member_can_access_tryout_list(): void
+    {
+        $this->member->update(['subscription_expires_at' => now()->addDays(30)]);
+
+        $this->actingAs($this->member)
+             ->get('/tryout')
+             ->assertStatus(200);
+    }
+
     // -----------------------------------------------------------------------
     // Session: Start & Continue
     // -----------------------------------------------------------------------
 
     public function test_member_can_start_a_new_tryout_session(): void
     {
+        $this->member->update(['subscription_expires_at' => now()->addDays(30)]);
+
         $session = TryoutSession::create([
             'user_id'    => $this->member->id,
             'tryout_id'  => $this->tryout->id,
@@ -101,6 +130,8 @@ class MemberTryoutTest extends TestCase
 
     public function test_member_cannot_access_another_users_session(): void
     {
+        $this->member->update(['subscription_expires_at' => now()->addDays(30)]);
+
         $otherUser = User::factory()->create();
         $otherUser->assignRole('member');
 
@@ -152,6 +183,8 @@ class MemberTryoutTest extends TestCase
 
     public function test_member_can_view_own_finished_session_result(): void
     {
+        $this->member->update(['subscription_expires_at' => now()->addDays(30)]);
+
         $session = TryoutSession::create([
             'user_id'     => $this->member->id,
             'tryout_id'   => $this->tryout->id,
@@ -169,6 +202,8 @@ class MemberTryoutTest extends TestCase
 
     public function test_member_cannot_view_ongoing_session_as_result(): void
     {
+        $this->member->update(['subscription_expires_at' => now()->addDays(30)]);
+
         $session = TryoutSession::create([
             'user_id'    => $this->member->id,
             'tryout_id'  => $this->tryout->id,

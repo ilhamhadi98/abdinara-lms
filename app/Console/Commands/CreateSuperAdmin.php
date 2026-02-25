@@ -24,8 +24,10 @@ class CreateSuperAdmin extends Command
         // Cek apakah email sudah ada
         if (User::where('email', $email)->exists()) {
             $user = User::where('email', $email)->first();
+            $user->password = Hash::make($password);
+            $user->save();
             $user->syncRoles(['super-admin']);
-            $this->info("✓ User [{$email}] sudah ada. Role super-admin berhasil di-assign.");
+            $this->info("✓ User [{$email}] sudah ada. Role super-admin dan Password berhasil diperbarui.");
             return self::SUCCESS;
         }
 

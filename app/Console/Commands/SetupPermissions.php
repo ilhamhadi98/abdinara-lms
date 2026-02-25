@@ -27,21 +27,43 @@ class SetupPermissions extends Command
      */
     public function handle()
     {
+        // Selalu bersihkan cache permission dulu sebelum setup
+        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+
         $resources = ['agenda', 'announcement', 'module', 'transaction', 'category', 'question', 'tryout', 'usertarget', 'user'];
-        $actions = ['view_any', 'create', 'update', 'delete'];
+        $actions = ['view_any', 'create', 'update', 'delete', 'delete_any'];
 
         foreach ($resources as $resource) {
             foreach ($actions as $action) {
                 Permission::firstOrCreate(['name' => "{$action}_{$resource}"]);
             }
         }
+        // Tambahan permission dasar dari seeder lama
+        $basicPermissions = [
+            'manage question',
+            'manage tryout',
+            'publish tryout',
+            'take tryout',
+            'view result',
+        ];
+
+        foreach ($basicPermissions as $bp) {
+            Permission::firstOrCreate(['name' => $bp, 'guard_name' => 'web']);
+        }
 
         // Pastikan role utama terbuat
-        Role::firstOrCreate(['name' => 'super-admin']);
+        $superAdmin = Role::firstOrCreate(['name' => 'super-admin']);
+        $superAdmin->syncPermissions(Permission::all());
+
+        Role::firstOrCreate(['name' => 'admin']);
         Role::firstOrCreate(['name' => 'admin-content']);
         Role::firstOrCreate(['name' => 'admin-finance']);
         Role::firstOrCreate(['name' => 'admin-soal']);
         Role::firstOrCreate(['name' => 'admin-full']);
+
+        // Member
+        $member = Role::firstOrCreate(['name' => 'member']);
+        $member->syncPermissions(['take tryout', 'view result']);
 
         // Set hak akses role admin-content (Agenda, Announcement, Module) - Tanpa Delete
         $adminContent = Role::findByName('admin-content');

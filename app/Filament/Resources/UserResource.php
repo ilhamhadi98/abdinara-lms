@@ -52,6 +52,12 @@ class UserResource extends Resource
                     ->required(fn (string $operation): bool => $operation === 'create')
                     ->helperText('Kosongkan jika tidak ingin ubah password'),
 
+                Forms\Components\TextInput::make('telegram_chat_id')
+                    ->label('ID Chat Telegram')
+                    ->numeric()
+                    ->maxLength(255)
+                    ->helperText('Diperlukan untuk otentikasi OTP login Admin'),
+
                 Forms\Components\Select::make('roles')
                     ->label('Role')
                     ->multiple()

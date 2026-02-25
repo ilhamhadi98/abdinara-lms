@@ -1,0 +1,64 @@
+
+   FAIL  Tests\Feature\RolePermissionTest
+  ⨯ admin content can manage agendas but cannot delete                  11.69s  
+  ⨯ admin finance can manage transactions but cannot delete              0.13s  
+  ⨯ admin soal can manage categories but cannot delete                   0.12s  
+  ✓ super admin has full access including deletion                       0.13s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\RolePermissionTest > admin…   BadMethodCallException   
+  Call to undefined method App\Models\User::getDefaultGuardName()
+
+  at vendor/laravel/framework/src/Illuminate/Support/Traits/ForwardsCalls.php:67
+     63▕      * @throws \BadMethodCallException
+     64▕      */
+     65▕     protected static function throwBadMethodCallException($method)
+     66▕     {
+  ➜  67▕         throw new BadMethodCallException(sprintf(
+     68▕             'Call to undefined method %s::%s()', static::class, $method
+     69▕         ));
+     70▕     }
+     71▕ }
+
+      [2m+3 vendor frames [22m
+  4   tests/Feature/RolePermissionTest.php:66
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\RolePermissionTest > admin finance can manage trans…   
+  Admin Finance dilarang masuk ke menu Agenda
+Failed asserting that true is false.
+
+  at tests/Feature/RolePermissionTest.php:90
+     86▕         // Uji Akses Hapus Konten (Transaction) - HARUS FALSE
+     87▕         $this->assertFalse(TransactionResource::canDeleteAny(), 'Admin Finance TIDAK BOLEH menghapus data pembayaran');
+     88▕ 
+     89▕         // Uji Keterasingan Modul: Finance tidak merecoki Modul Konten
+  ➜  90▕         $this->assertFalse(AgendaResource::canViewAny(), 'Admin Finance dilarang masuk ke menu Agenda');
+     91▕     }
+     92▕ 
+     93▕     public function test_admin_soal_can_manage_categories_but_cannot_delete()
+     94▕     {
+
+  1   tests/Feature/RolePermissionTest.php:90
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\RolePermissionTest > admin soal can manage categori…   
+  Admin Soal dilarang menyentuh transaksi pembayaran
+Failed asserting that true is false.
+
+  at tests/Feature/RolePermissionTest.php:107
+    103▕         // Uji Akses Hapus (Category) - HARUS FALSE
+    104▕         $this->assertFalse(CategoryResource::canDeleteAny(), 'Admin Soal TIDAK BOLEH menghapus massal relasi Kategori');
+    105▕ 
+    106▕         // Uji Keterasingan Relasi
+  ➜ 107▕         $this->assertFalse(TransactionResource::canViewAny(), 'Admin Soal dilarang menyentuh transaksi pembayaran');
+    108▕     }
+    109▕ 
+    110▕     public function test_super_admin_has_full_access_including_deletion()
+    111▕     {
+
+  1   tests/Feature/RolePermissionTest.php:107
+
+
+  Tests:    3 failed, 1 passed (13 assertions)
+  Duration: 12.19s
+
