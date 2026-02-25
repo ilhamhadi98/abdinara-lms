@@ -9,8 +9,11 @@
 
     <title>{{ config('app.name', 'Abdinara') }}</title>
 
-    <!-- PWA -->
-    <link rel="manifest" href="/manifest.json">
+    <!-- Favicon & PWA Icons -->
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('icon-192.png') }}">
+    <link rel="apple-touch-icon" sizes="192x192" href="{{ asset('icon-192.png') }}">
+    <link rel="manifest" href="{{ asset('manifest.json') }}">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">

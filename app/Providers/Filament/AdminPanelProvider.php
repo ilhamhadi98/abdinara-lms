@@ -28,6 +28,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->brandName('Abdinara LMS')
+            ->favicon(asset('favicon.ico'))
             ->darkMode(true)
             ->colors([
                 'primary' => Color::Blue,
