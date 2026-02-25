@@ -12,9 +12,7 @@
                     kelulusan Anda secara terukur.</p>
             </div>
             <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
-                <a href="#materi" class="btn btn-primary btn-lg rounded-pill px-4 shadow-sm me-2">Lanjut Belajar</a>
-                <a href="{{ route('profile.edit') }}" class="btn btn-outline-secondary btn-lg rounded-pill px-4">Edit
-                    Profil</a>
+                <a href="#materi" class="btn btn-primary btn-lg rounded-pill px-4 shadow-sm">Lanjut Belajar</a>
             </div>
         </div>
 
@@ -94,7 +92,7 @@
         @if (Auth::user()->isSubscribed())
             <div class="row mb-4">
                 <div class="col-12">
-                    <div class="alert alert-success d-flex align-items-center justify-content-between rounded-4 shadow-sm border-0 border-start border-5 border-success p-4 mb-4"
+                    <div class="alert alert-success d-flex flex-column flex-md-row align-items-md-center justify-content-between rounded-4 shadow-sm border-0 border-start border-5 border-success p-4 mb-4"
                         role="alert" style="background-color: var(--bs-success-bg-subtle, #d1e7dd);">
                         <div class="d-flex align-items-center gap-3">
                             <i class="bi bi-shield-check display-6 text-success"></i>
@@ -106,15 +104,18 @@
                                 </p>
                             </div>
                         </div>
-                        <a href="{{ route('subscription.history') }}"
-                            class="btn btn-outline-success rounded-pill fw-bold shadow-sm px-4">Riwayat Transaksi</a>
+                        <div class="d-grid mt-3 mt-md-0">
+                            <a href="{{ route('subscription.history') }}"
+                                class="btn btn-outline-success rounded-pill fw-bold shadow-sm px-4">Riwayat
+                                Transaksi</a>
+                        </div>
                     </div>
                 </div>
             </div>
         @else
             <div class="row mb-4">
                 <div class="col-12">
-                    <div class="alert alert-secondary d-flex align-items-center justify-content-between rounded-4 shadow-sm border-0 border-start border-5 border-secondary p-4 mb-4"
+                    <div class="alert alert-secondary d-flex flex-column flex-md-row align-items-md-center justify-content-between rounded-4 shadow-sm border-0 border-start border-5 border-secondary p-4 mb-4"
                         role="alert" style="background-color: var(--bs-secondary-bg-subtle, #e2e3e5);">
                         <div class="d-flex align-items-center gap-3">
                             <i class="bi bi-shield-x display-6 text-secondary"></i>
@@ -124,7 +125,8 @@
                                     semua fitur tryout CAT dan materi eksklusif.</p>
                             </div>
                         </div>
-                        <div class="d-flex gap-2">
+                        <div
+                            class="d-grid gap-2 d-sm-flex justify-content-sm-start justify-content-md-end mt-3 mt-md-0">
                             <a href="{{ route('subscription.history') }}"
                                 class="btn btn-outline-secondary rounded-pill fw-bold shadow-sm px-4">Riwayat</a>
                             <a href="{{ route('subscription.index') }}"
