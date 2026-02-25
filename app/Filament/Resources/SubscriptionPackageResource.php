@@ -41,7 +41,7 @@ class SubscriptionPackageResource extends Resource
                     ->label('Durasi (hari)')
                     ->required()
                     ->numeric()
-                    ->helpText('Berapa hari masa aktif untuk paket ini'),
+                    ->helperText('Berapa hari masa aktif untuk paket ini'),
                 Forms\Components\Toggle::make('is_active')
                     ->label('Paket Aktif?')
                     ->default(true)
