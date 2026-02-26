@@ -11,7 +11,20 @@ class Tryout extends Model
         'duration_minutes',
         'total_questions',
         'is_active',
+        'category_id',
+        'subtopic_id',
+        'difficulty',
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function subtopic()
+    {
+        return $this->belongsTo(Subtopic::class);
+    }
 
     protected function casts(): array
     {

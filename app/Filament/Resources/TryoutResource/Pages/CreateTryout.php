@@ -17,11 +17,30 @@ class CreateTryout extends CreateRecord
         $tryout = $this->record;
         $total  = $tryout->total_questions;
 
-        $questionIds = Question::inRandomOrder()
+        $query = Question::query();
+
+        // Filter berdasarkan Subtopik (Prioritas Utama)
+        if ($tryout->subtopic_id) {
+            $query->where('subtopic_id', $tryout->subtopic_id);
+        } 
+        // Filter berdasarkan Kategori (Jika Subtopik tidak dipilih)
+        elseif ($tryout->category_id) {
+            $query->whereHas('subtopic', function ($q) use ($tryout) {
+                $q->where('category_id', $tryout->category_id);
+            });
+        }
+
+        // Filter berdasarkan Tingkat Kesulitan
+        if ($tryout->difficulty) {
+            $query->where('difficulty', $tryout->difficulty);
+        }
+
+        $questionIds = $query->inRandomOrder()
             ->limit($total)
             ->pluck('id');
 
         if ($questionIds->isEmpty()) {
+            // Optional: Tambahkan notifikasi jika tidak ada soal yang sesuai
             return;
         }
 

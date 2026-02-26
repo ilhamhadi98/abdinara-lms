@@ -2,13 +2,17 @@
 
 namespace App\Filament\Resources;
 
+use App\Models\Category;
+use App\Models\Subtopic;
 use App\Models\Tryout;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Support\Collection;
 
 class TryoutResource extends Resource
 {
@@ -48,7 +52,7 @@ class TryoutResource extends Resource
     public static function form(Form $form): Form
     {
         return $form->schema([
-            Forms\Components\Section::make()->schema([
+            Forms\Components\Section::make('Informasi Dasar')->schema([
                 Forms\Components\TextInput::make('title')
                     ->label('Judul Tryout')
                     ->required()
@@ -69,12 +73,39 @@ class TryoutResource extends Resource
                     ->numeric()
                     ->minValue(1)
                     ->default(100)
-                    ->helperText('Soal dipilih secara acak dari bank soal'),
+                    ->helperText('Soal akan dipilih secara acak sesuai filter di bawah ini'),
 
                 Forms\Components\Toggle::make('is_active')
                     ->label('Aktif / Dipublish')
                     ->default(false),
             ])->columns(2),
+
+            Forms\Components\Section::make('Filter Sumber Soal')->schema([
+                Forms\Components\Select::make('category_id')
+                    ->label('Kategori')
+                    ->options(Category::orderBy('name')->pluck('name', 'id'))
+                    ->placeholder('Mix All (Semua Kategori)')
+                    ->live()
+                    ->afterStateUpdated(fn (Forms\Set $set) => $set('subtopic_id', null)),
+
+                Forms\Components\Select::make('subtopic_id')
+                    ->label('Subtopik')
+                    ->options(fn (Get $get): Collection => Subtopic::where('category_id', $get('category_id'))
+                        ->orderBy('name')
+                        ->pluck('name', 'id'))
+                    ->placeholder('Mix All (Semua Subtopik)')
+                    ->disabled(fn (Get $get) => empty($get('category_id')))
+                    ->live(),
+
+                Forms\Components\Select::make('difficulty')
+                    ->label('Tingkat Kesulitan')
+                    ->options([
+                        1 => 'Mudah',
+                        2 => 'Sedang',
+                        3 => 'Sulit'
+                    ])
+                    ->placeholder('Mix All (Semua Tingkat)'),
+            ])->columns(3)->description('Biarkan kosong (Mix All) jika ingin mengambil soal secara acak dari semua kategori/tingkat.'),
         ]);
     }
 
