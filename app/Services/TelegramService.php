@@ -16,8 +16,14 @@ class TelegramService
 
     public function sendMessage(string $chatId, string $message): bool
     {
-        // Bersihkan prefix 'bot' jika user terlanjur menempelkannya di .env
-        $cleanToken = str_replace('bot', '', $this->botToken);
+        // Bersihkan prefix 'bot', spasi, dan tanda kutip (" atau ') yang mungkin terbawa dari .env/server
+        $cleanToken = preg_replace('/^bot/i', '', trim($this->botToken, '"\' '));
+
+        if (empty($cleanToken)) {
+            $errorMsg = 'Telegram API error: Bot token kosong. Pastikan TELEGRAM_BOT_TOKEN sudah diset, config cache sudah di-clear, atau server Octane/Roadrunner telah direstart.';
+            Log::error($errorMsg);
+            throw new \Exception($errorMsg);
+        }
 
         try {
             // Gunakan withoutVerifying() untuk menghindari isu sertifikat SSL di production server
@@ -28,8 +34,10 @@ class TelegramService
             ]);
 
             if (! $response->successful()) {
-                Log::error('Telegram API error: '.$response->body());
-                throw new \Exception('Telegram API error: '.$response->body());
+                $maskedToken = substr($cleanToken, 0, 5).str_repeat('*', max(0, strlen($cleanToken) - 10)).substr($cleanToken, -5);
+                $logMsg = 'Telegram API error: '.$response->body().' | Token length: '.strlen($cleanToken).' | Masked: '.$maskedToken;
+                Log::error($logMsg);
+                throw new \Exception('Telegram API error: '.$response->body().' [Token check: length '.strlen($cleanToken).']');
             }
 
             return true;
