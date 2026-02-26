@@ -51,39 +51,66 @@
             data-client-key="{{ config('midtrans.client_key') }}"></script>
 
         <script type="text/javascript">
-            document.getElementById('pay-button').onclick = function() {
-                // SnapToken acquired from previous step
-                snap.pay('{{ $transaction->snap_token }}', {
-                    // Optional
-                    onSuccess: function(result) {
-                        const resDiv = document.getElementById('payment-result');
-                        resDiv.classList.remove('d-none');
-                        resDiv.className =
-                            "mt-4 alert alert-success bg-success bg-opacity-10 border-success border-opacity-25 text-success-emphasis rounded-3 w-100";
-                        resDiv.innerHTML =
-                            '<i class="bi bi-check-circle me-2"></i> Pembayaran berhasil! Halaman dialihkan...';
-                        setTimeout(function() {
-                            window.location.href = "{{ route('dashboard') }}";
-                        }, 3000);
-                    },
-                    // Optional
-                    onPending: function(result) {
-                        const resDiv = document.getElementById('payment-result');
-                        resDiv.classList.remove('d-none');
-                        resDiv.innerHTML =
-                            '<i class="bi bi-hourglass-split me-2"></i> Menunggu pembayaran Anda.';
-                    },
-                    // Optional
-                    onError: function(result) {
-                        const resDiv = document.getElementById('payment-result');
-                        resDiv.classList.remove('d-none');
-                        resDiv.className =
-                            "mt-4 alert alert-danger bg-danger bg-opacity-10 border-danger border-opacity-25 text-danger-emphasis rounded-3 w-100";
-                        resDiv.innerHTML =
-                            '<i class="bi bi-x-circle me-2"></i> Gagal memproses pembayaran. Silakan coba lagi.';
-                    }
-                });
-            };
+            (function() {
+                var snapStarted = false;
+                var payButton = document.getElementById('pay-button');
+
+                if (payButton) {
+                    payButton.onclick = function(e) {
+                        e.preventDefault();
+
+                        if (snapStarted) return;
+                        snapStarted = true;
+
+                        // Disable button to prevent double click
+                        payButton.disabled = true;
+                        payButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Memproses...';
+
+                        snap.pay('{{ $transaction->snap_token }}', {
+                            onSuccess: function(result) {
+                                snapStarted = false;
+                                const resDiv = document.getElementById('payment-result');
+                                resDiv.classList.remove('d-none');
+                                resDiv.className =
+                                    "mt-4 alert alert-success bg-success bg-opacity-10 border-success border-opacity-25 text-success-emphasis rounded-3 w-100";
+                                resDiv.innerHTML =
+                                    '<i class="bi bi-check-circle me-2"></i> Pembayaran berhasil! Halaman dialihkan...';
+                                setTimeout(function() {
+                                    window.location.href = "{{ route('dashboard') }}";
+                                }, 3000);
+                            },
+                            onPending: function(result) {
+                                snapStarted = false;
+                                payButton.disabled = false;
+                                payButton.innerHTML =
+                                    'Bayar Sekarang <i class="bi bi-arrow-right-circle ms-2"></i>';
+                                const resDiv = document.getElementById('payment-result');
+                                resDiv.classList.remove('d-none');
+                                resDiv.innerHTML =
+                                    '<i class="bi bi-hourglass-split me-2"></i> Menunggu pembayaran Anda.';
+                            },
+                            onError: function(result) {
+                                snapStarted = false;
+                                payButton.disabled = false;
+                                payButton.innerHTML =
+                                    'Bayar Sekarang <i class="bi bi-arrow-right-circle ms-2"></i>';
+                                const resDiv = document.getElementById('payment-result');
+                                resDiv.classList.remove('d-none');
+                                resDiv.className =
+                                    "mt-4 alert alert-danger bg-danger bg-opacity-10 border-danger border-opacity-25 text-danger-emphasis rounded-3 w-100";
+                                resDiv.innerHTML =
+                                    '<i class="bi bi-x-circle me-2"></i> Gagal memproses pembayaran. Silakan coba lagi.';
+                            },
+                            onClose: function() {
+                                snapStarted = false;
+                                payButton.disabled = false;
+                                payButton.innerHTML =
+                                    'Bayar Sekarang <i class="bi bi-arrow-right-circle ms-2"></i>';
+                            }
+                        });
+                    };
+                }
+            })();
         </script>
     @endpush
 </x-app-layout>
