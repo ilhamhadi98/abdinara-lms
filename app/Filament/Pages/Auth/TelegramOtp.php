@@ -76,16 +76,29 @@ class TelegramOtp extends SimplePage
         $message .= "Kode OTP Anda adalah: <code>{$otp}</code>\n";
         $message .= "<i>Kode ini akan kedaluwarsa dalam 2 menit. Jangan bagikan kode ini kepada siapa pun!</i>";
         
-        $telegramService->sendMessage($user->telegram_chat_id, $message);
+        try {
+            $telegramService->sendMessage($user->telegram_chat_id, $message);
 
-        $this->expiresAt = $expiresAt->toDateTimeString();
-        $this->timeLeft = 120;
-        
-        \Filament\Notifications\Notification::make()
-            ->title('OTP Terkirim')
-            ->body('Kode OTP baru telah dikirimkan ke Telegram Anda.')
-            ->success()
-            ->send();
+            $this->expiresAt = $expiresAt->toDateTimeString();
+            $this->timeLeft = 120;
+            
+            \Filament\Notifications\Notification::make()
+                ->title('OTP Terkirim')
+                ->body('Kode OTP baru telah dikirimkan ke Telegram Anda.')
+                ->success()
+                ->send();
+        } catch (\Exception $e) {
+            // Hapus cache karena pengiriman gagal
+            Cache::forget('otp_' . $user->id);
+            $this->timeLeft = 0;
+
+            \Filament\Notifications\Notification::make()
+                ->title('Gagal Mengirim OTP')
+                ->body('Terjadi kesalahan Telegram (Mungkin API Blocked/Salah Chat ID/Bot Token). Error: ' . $e->getMessage())
+                ->danger()
+                ->persistent()
+                ->send();
+        }
     }
 
     public function updateTimer()

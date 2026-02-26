@@ -16,8 +16,12 @@ class TelegramService
 
     public function sendMessage(string $chatId, string $message): bool
     {
+        // Bersihkan prefix 'bot' jika user terlanjur menempelkannya di .env
+        $cleanToken = str_replace('bot', '', $this->botToken);
+
         try {
-            $response = Http::post("https://api.telegram.org/bot{$this->botToken}/sendMessage", [
+            // Gunakan withoutVerifying() untuk menghindari isu sertifikat SSL di production server
+            $response = Http::withoutVerifying()->post("https://api.telegram.org/bot{$cleanToken}/sendMessage", [
                 'chat_id' => $chatId,
                 'text' => $message,
                 'parse_mode' => 'HTML',
@@ -25,15 +29,13 @@ class TelegramService
 
             if (! $response->successful()) {
                 Log::error('Telegram API error: '.$response->body());
-
-                return false;
+                throw new \Exception('Telegram API error: '.$response->body());
             }
 
             return true;
         } catch (\Exception $e) {
             Log::error('Telegram service exception: '.$e->getMessage());
-
-            return false;
+            throw new \Exception('Telegram Error: '.$e->getMessage());
         }
     }
 }
