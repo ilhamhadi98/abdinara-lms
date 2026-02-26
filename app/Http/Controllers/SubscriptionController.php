@@ -118,14 +118,16 @@ class SubscriptionController extends Controller
 
     public function notification(Request $request)
     {
+        Log::info('Midtrans Notification Received', $request->all());
+
         try {
             $notif = new \Midtrans\Notification();
         } catch (\Exception $e) {
             Log::error('Midtrans Notification Error: ' . $e->getMessage());
-            return response()->json(['status' => 'error'], 500);
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
         }
 
-        $transaction = $notif->transaction_status;
+        $transaction_status = $notif->transaction_status;
         $type = $notif->payment_type;
         $order_id = $notif->order_id;
         $fraud = $notif->fraud_status;
@@ -133,30 +135,36 @@ class SubscriptionController extends Controller
         $trx = Transaction::where('order_id', $order_id)->with('package', 'user')->first();
 
         if (!$trx) {
+            Log::warning('Midtrans Notification: Transaction not found for Order ID: ' . $order_id);
             return response()->json(['status' => 'error', 'message' => 'Transaction not found'], 404);
         }
 
-        $this->updateTransactionStatus($trx, $transaction, $type, $fraud);
+        $this->updateTransactionStatus($trx, $transaction_status, $type, $fraud);
 
         return response()->json(['status' => 'ok']);
     }
 
     private function updateTransactionStatus(Transaction $trx, $transaction, $type, $fraud)
     {
+        Log::info("Updating Transaction ID: {$trx->id}, Order ID: {$trx->order_id}, Midtrans Status: {$transaction}");
+
         // Pre-empt duplicate activation
         if ($trx->status === 'success') {
+            Log::info("Transaction {$trx->order_id} already success, skipping activation.");
             return;
         }
 
-        if ($transaction == 'capture' || $transaction == 'settlement') {
+        if ($transaction == 'capture' || $transaction == 'settlement' || $transaction == 'success') {
             if ($type == 'credit_card' && $fraud == 'challenge') {
                 $trx->update(['status' => 'challenge']);
             } else {
                 $trx->update(['status' => 'success', 'payment_type' => $type]);
                 $this->activateSubscription($trx);
+                Log::info("Transaction {$trx->order_id} marked as SUCCESS and activated.");
             }
         } else if ($transaction == 'cancel' || $transaction == 'deny' || $transaction == 'expire') {
             $trx->update(['status' => 'failed']);
+            Log::info("Transaction {$trx->order_id} marked as FAILED.");
         } else if ($transaction == 'pending') {
             $trx->update(['status' => 'pending']);
         }
