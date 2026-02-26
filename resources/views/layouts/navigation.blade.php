@@ -96,35 +96,40 @@
         </div>
 
         <div class="list-group list-group-flush mb-3 rounded border">
-        @endcan
+            @can('take tryout')
+                <a href="{{ route('tryout.results') }}"
+                    class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3">
+                    <i class="bi bi-graph-up text-primary"></i> <span class="fw-medium">Hasil & Analisis Saya</span>
+                </a>
+            @endcan
 
-        <a href="{{ route('subscription.history') }}"
-            class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3">
-            <i class="bi bi-clock-history text-success"></i> <span class="fw-medium">Riwayat Langganan</span>
-        </a>
-
-        @role('admin|super-admin')
-            <a href="/admin" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3">
-                <i class="bi bi-gear-fill text-warning"></i> <span class="fw-medium">Admin Panel</span>
+            <a href="{{ route('subscription.history') }}"
+                class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3">
+                <i class="bi bi-clock-history text-success"></i> <span class="fw-medium">Riwayat Langganan</span>
             </a>
-        @endrole
-    </div>
 
-    <div class="d-flex justify-content-between align-items-center px-2 mb-3">
-        <span class="text-secondary fw-medium">Tampilan Gelap</span>
-        <div class="form-check form-switch m-0" style="padding-left: 0;">
-            <input class="form-check-input ms-0" type="checkbox" role="switch" id="themeToggleMobile"
-                style="width: 3em; height: 1.5em; cursor: pointer;" onchange="toggleTheme()">
+            @role('admin|super-admin')
+                <a href="/admin" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3">
+                    <i class="bi bi-gear-fill text-warning"></i> <span class="fw-medium">Admin Panel</span>
+                </a>
+            @endrole
         </div>
-    </div>
 
-    <form method="POST" action="{{ route('logout') }}" class="mt-2 text-center pb-2">
-        @csrf
-        <button type="submit" class="btn btn-danger w-100 rounded-pill py-2 fw-bold shadow-sm">
-            <i class="bi bi-box-arrow-right me-2"></i> Keluar Akun
-        </button>
-    </form>
-</div>
+        <div class="d-flex justify-content-between align-items-center px-2 mb-3">
+            <span class="text-secondary fw-medium">Tampilan Gelap</span>
+            <div class="form-check form-switch m-0" style="padding-left: 0;">
+                <input class="form-check-input ms-0" type="checkbox" role="switch" id="themeToggleMobile"
+                    style="width: 3em; height: 1.5em; cursor: pointer;" onchange="toggleTheme()">
+            </div>
+        </div>
+
+        <form method="POST" action="{{ route('logout') }}" class="mt-2 text-center pb-2">
+            @csrf
+            <button type="submit" class="btn btn-danger w-100 rounded-pill py-2 fw-bold shadow-sm">
+                <i class="bi bi-box-arrow-right me-2"></i> Keluar Akun
+            </button>
+        </form>
+    </div>
 </div>
 
 <script>
