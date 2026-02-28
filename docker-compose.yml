@@ -23,11 +23,12 @@ services:
       DB_DATABASE: abdinara_lms_2
       DB_USERNAME: root
       DB_PASSWORD: root
+      CACHE_STORE: file
     depends_on:
       mysql:
         condition: service_healthy
     command: >
-      sh -c " sed -i 's/^DB_HOST=.*/DB_HOST=mysql/' .env && sed -i 's/^DB_PORT=.*/DB_PORT=3306/' .env && sed -i 's/^DB_DATABASE=.*/DB_DATABASE=abdinara_lms_2/' .env && sed -i 's/^DB_USERNAME=.*/DB_USERNAME=root/' .env && sed -i 's/^DB_PASSWORD=.*/DB_PASSWORD=root/' .env && grep -q '^OCTANE_SERVER=' .env && sed -i 's/^OCTANE_SERVER=.*/OCTANE_SERVER=roadrunner/' .env || echo 'OCTANE_SERVER=roadrunner' >> .env && if ! grep -q '^APP_KEY=base64:' .env; then php artisan key:generate --force; fi && until php artisan migrate --force; do echo 'Waiting for MySQL...'; sleep 3; done && php artisan db:seed --class=RolePermissionSeeder --force && php artisan make:super-admin --name='Admin' --email='admin@abdinara.id' --password='@ANiam1998' && php artisan storage:link --force && php artisan config:cache && php artisan view:cache && if [ ! -f ./rr ]; then ./vendor/bin/rr get-binary; fi && php artisan octane:start --server=roadrunner --host=0.0.0.0 --port=8000 "
+      sh -c " sed -i 's/^DB_HOST=.*/DB_HOST=mysql/' .env && sed -i 's/^DB_PORT=.*/DB_PORT=3306/' .env && sed -i 's/^DB_DATABASE=.*/DB_DATABASE=abdinara_lms_2/' .env && sed -i 's/^DB_USERNAME=.*/DB_USERNAME=root/' .env && sed -i 's/^DB_PASSWORD=.*/DB_PASSWORD=root/' .env && grep -q '^OCTANE_SERVER=' .env && sed -i 's/^OCTANE_SERVER=.*/OCTANE_SERVER=roadrunner/' .env || echo 'OCTANE_SERVER=roadrunner' >> .env && if ! grep -q '^APP_KEY=base64:' .env; then php artisan key:generate --force; fi && until php artisan migrate --force 2>/dev/null; do echo 'Waiting for MySQL...'; sleep 3; done && mysql -h mysql -uroot -proot -e 'CREATE DATABASE IF NOT EXISTS abdinara_lms_testing;' 2>/dev/null && php artisan db:seed --class=RolePermissionSeeder --force && php artisan make:super-admin --name='Admin' --email='admin@abdinara.id' --password='@ANiam1998' && php artisan storage:link --force && php artisan config:cache && php artisan view:cache && if [ ! -f ./rr ]; then ./vendor/bin/rr get-binary; fi && php artisan octane:start --server=roadrunner --host=0.0.0.0 --port=8000 "
 
   mysql:
     image: mysql:8.4

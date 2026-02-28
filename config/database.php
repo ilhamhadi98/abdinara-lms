@@ -63,6 +63,21 @@ return [
             ]) : [],
         ],
 
+        // Koneksi khusus untuk testing - SELALU mengarah ke abdinara_lms_testing
+        // Ini memastikan tests tidak pernah menyentuh database utama (abdinara_lms_2)
+        'testing' => [
+            'driver' => 'mysql',
+            'host' => env('DB_HOST', '127.0.0.1'),
+            'port' => env('DB_PORT', '3306'),
+            'database' => 'abdinara_lms_testing',
+            'username' => env('DB_USERNAME', 'root'),
+            'password' => env('DB_PASSWORD', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'strict' => true,
+        ],
+
         'mariadb' => [
             'driver' => 'mariadb',
             'url' => env('DB_URL'),

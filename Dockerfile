@@ -18,9 +18,11 @@ RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg62-turbo-dev \
     libfreetype6-dev \
+    sqlite3 \
+    libsqlite3-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-configure intl \
-    && docker-php-ext-install pdo_mysql zip pcntl sockets opcache intl gd \
+    && docker-php-ext-install pdo_mysql pdo_sqlite zip pcntl sockets opcache intl gd \
     && rm -rf /var/lib/apt/lists/*
 
 # OPcache tuning untuk Octane/RoadRunner (long-running process)
