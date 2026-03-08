@@ -30,7 +30,7 @@ class SetupPermissions extends Command
         // Selalu bersihkan cache permission dulu sebelum setup
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
-        $resources = ['agenda', 'announcement', 'module', 'transaction', 'category', 'question', 'tryout', 'usertarget', 'user', 'subscriptionpackage'];
+        $resources = ['agenda', 'announcement', 'module', 'transaction', 'category', 'question', 'tryout', 'usertarget', 'user', 'subscriptionpackage', 'subtopic'];
         $actions = ['view_any', 'create', 'update', 'delete', 'delete_any'];
 
         foreach ($resources as $resource) {
@@ -80,10 +80,11 @@ class SetupPermissions extends Command
             'view_any_subscriptionpackage', 'create_subscriptionpackage', 'update_subscriptionpackage'
         ]);
 
-        // Set hak akses role admin-soal (Category, Question, Tryout) - Tanpa Delete
+        // Set hak akses role admin-soal (Category, Subtopic, Question, Tryout) - Tanpa Delete
         $adminSoal = Role::findByName('admin-soal');
         $adminSoal->syncPermissions([
             'view_any_category', 'create_category', 'update_category',
+            'view_any_subtopic', 'create_subtopic', 'update_subtopic',
             'view_any_question', 'create_question', 'update_question',
             'view_any_tryout', 'create_tryout', 'update_tryout',
         ]);
