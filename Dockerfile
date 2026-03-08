@@ -20,6 +20,7 @@ RUN apt-get update && apt-get install -y \
     libfreetype6-dev \
     sqlite3 \
     libsqlite3-dev \
+    default-mysql-client \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-configure intl \
     && docker-php-ext-install pdo_mysql pdo_sqlite zip pcntl sockets opcache intl gd \
