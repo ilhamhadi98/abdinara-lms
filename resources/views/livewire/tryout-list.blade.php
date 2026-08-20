@@ -17,7 +17,7 @@
                     class="form-control border-0 bg-transparent py-2 shadow-none text-dark"
                     placeholder="Cari judul tryout..."
                     aria-label="Cari tryout">
-                @if (trim($search) !== '')
+                @if (trim($this->search ?? $search ?? '') !== '')
                     <button class="btn btn-link text-secondary text-decoration-none px-3"
                         type="button"
                         wire:click="clearSearch"
@@ -30,10 +30,11 @@
     </div>
 
     {{-- Search info banner if searching --}}
-    @if (trim($search) !== '')
+    @if (trim($this->search ?? $search ?? '') !== '')
+        @php $searchKeyword = $this->search ?? $search ?? ''; @endphp
         <div class="d-flex align-items-center justify-content-between bg-primary-subtle text-primary-emphasis px-3 py-2 rounded-3 mb-4 small">
             <div>
-                <i class="bi bi-funnel-fill me-1"></i> Menampilkan hasil pencarian: <strong>"{{ $search }}"</strong> ({{ $tryouts->total() }} tryout ditemukan)
+                <i class="bi bi-funnel-fill me-1"></i> Menampilkan hasil pencarian: <strong>"{{ $searchKeyword }}"</strong> ({{ $tryouts->total() }} tryout ditemukan)
             </div>
             <button wire:click="clearSearch" class="btn btn-sm btn-link text-primary text-decoration-none p-0 fw-semibold">
                 Reset Filter
@@ -45,15 +46,16 @@
     @if ($tryouts->isEmpty())
         <div class="card border-0 shadow-sm rounded-4 p-5 text-center text-muted my-4">
             <i class="bi bi-inbox fs-1 opacity-50 mb-3 d-block"></i>
-            @if (trim($search) !== '')
+            @if (trim($this->search ?? $search ?? '') !== '')
                 <h5 class="fw-bold text-dark">Tidak ada tryout ditemukan</h5>
-                <p class="text-secondary small mb-3">Tidak ditemukan tryout yang cocok dengan kata kunci "<strong>{{ $search }}</strong>".</p>
+                <p class="text-secondary small mb-3">Tidak ditemukan tryout yang cocok dengan kata kunci "<strong>{{ $this->search ?? $search }}</strong>".</p>
                 <div>
                     <button wire:click="clearSearch" class="btn btn-outline-primary btn-sm rounded-pill px-4">
                         Lihat Semua Tryout
                     </button>
                 </div>
             @else
+
                 <h5 class="fw-normal">Belum ada tryout yang tersedia saat ini.</h5>
             @endif
         </div>

@@ -106,6 +106,8 @@ class TryoutList extends Component
         return view('livewire.tryout-list', [
             'tryouts'    => $tryouts,
             'mySessions' => $mySessions,
+            'search'     => $this->search,
+            'jumpPage'   => $this->jumpPage,
         ])->layout('layouts.app');
     }
 }
