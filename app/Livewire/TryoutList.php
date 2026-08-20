@@ -5,10 +5,40 @@ namespace App\Livewire;
 use App\Models\Tryout;
 use App\Models\TryoutSession;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\Url;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class TryoutList extends Component
 {
+    use WithPagination;
+
+    protected string $paginationTheme = 'bootstrap';
+
+    #[Url(history: true)]
+    public string $search = '';
+
+    public ?int $jumpPage = null;
+
+    public function updatedSearch(): void
+    {
+        $this->resetPage();
+    }
+
+    public function clearSearch(): void
+    {
+        $this->search = '';
+        $this->resetPage();
+    }
+
+    public function jumpToPage(): void
+    {
+        if ($this->jumpPage !== null && $this->jumpPage >= 1) {
+            $this->setPage((int) $this->jumpPage);
+            $this->jumpPage = null;
+        }
+    }
+
     public function startTryout(int $tryoutId): void
     {
         $tryout = Tryout::where('id', $tryoutId)->where('is_active', true)->firstOrFail();
@@ -44,9 +74,24 @@ class TryoutList extends Component
 
     public function render()
     {
-        $tryouts = Tryout::where('is_active', true)
-            ->withCount('questions')
-            ->latest()
+        $query = Tryout::where('is_active', true)
+            ->withCount('questions');
+
+        if (trim($this->search) !== '') {
+            $term = '%' . trim($this->search) . '%';
+            $query->where(function ($q) use ($term) {
+                $q->where('title', 'like', $term)
+                  ->orWhereHas('category', function ($cq) use ($term) {
+                      $cq->where('name', 'like', $term);
+                  })
+                  ->orWhereHas('subtopic', function ($sq) use ($term) {
+                      $sq->where('name', 'like', $term);
+                  });
+            });
+        }
+
+        // Urutan ASC (Bukan DESC)
+        $tryouts = $query->orderBy('id', 'asc')
             ->paginate(12);
 
         // Get user's ongoing/finished sessions for this page of tryouts
@@ -58,7 +103,10 @@ class TryoutList extends Component
             ->get(['id', 'tryout_id', 'status', 'score', 'finished_at', 'expired_at'])
             ->keyBy('tryout_id');
 
-        return view('livewire.tryout-list', compact('tryouts', 'mySessions'))
-            ->layout('layouts.app');
+        return view('livewire.tryout-list', [
+            'tryouts'    => $tryouts,
+            'mySessions' => $mySessions,
+        ])->layout('layouts.app');
     }
 }
+
