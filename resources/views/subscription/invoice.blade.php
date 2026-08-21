@@ -12,16 +12,10 @@
                 <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-white text-dark" style="position: relative;">
                     <!-- Invoice Header -->
                     <div class="d-flex justify-content-between align-items-center border-bottom pb-4 mb-4">
-                        <div class="d-flex align-items-center gap-3">
-                            <img src="{{ asset('icon-192.png') }}" alt="Abdinara Logo"
-                                class="rounded-3 shadow-sm" style="width: 52px; height: 52px; object-fit: cover;"
-                                onerror="this.onerror=null; this.src='{{ asset('favicon.ico') }}';">
-                            <div>
-                                <h3 class="fw-bolder mb-0 brand fs-3" style="color: #0a2647; letter-spacing: -0.5px;">
-                                    Abdi<span style="color: #d4af37;">nara</span>.id
-                                </h3>
-                                <p class="text-body-secondary mb-0 small fw-medium" style="margin-top: -2px;">LMS Portal Resmi</p>
-                            </div>
+                        <div>
+                            <img src="{{ asset('favicon.ico') }}" alt="Abdinara Logo"
+                                style="height: 52px; width: auto; object-fit: contain;"
+                                onerror="this.onerror=null; this.src='{{ asset('icon-192.png') }}';">
                         </div>
                         <div class="text-end">
                             <h2 class="fw-bolder text-uppercase mb-1" style="color: #0a2647; letter-spacing: 1px;">INVOICE</h2>

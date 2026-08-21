@@ -44,9 +44,7 @@ class InvoicePageTest extends TestCase
         $response = $this->actingAs($user)->get(route('subscription.invoice', $transaction->id));
 
         $response->assertStatus(200);
-        $response->assertSee('icon-192.png');
-        $response->assertSee('Abdinara', false);
-        $response->assertSee('LMS Portal Resmi');
+        $response->assertSee('favicon.ico');
         $response->assertSee('TRX-1786009432-3-3');
         $response->assertSee('Gold');
         $response->assertSee('75.000');
