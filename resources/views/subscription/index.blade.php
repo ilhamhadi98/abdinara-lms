@@ -24,6 +24,48 @@
                     </div>
                 @endif
 
+                {{-- Active Subscription Status Card --}}
+                @if (Auth::user()->isSubscribed())
+                    @php
+                        $expiresAt = Auth::user()->subscription_expires_at;
+                        $diffDays = (int) ceil(now()->diffInSeconds($expiresAt, false) / 86400);
+                    @endphp
+                    <div class="card border-0 shadow-sm rounded-4 mb-5 overflow-hidden position-relative"
+                        style="background: linear-gradient(135deg, rgba(209, 231, 221, 0.55) 0%, rgba(232, 245, 233, 0.9) 100%); border-left: 6px solid #198754 !important;">
+                        <div class="card-body p-4">
+                            <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+                                <div class="d-flex align-items-start gap-3">
+                                    <div class="bg-success text-white rounded-circle p-3 d-flex align-items-center justify-content-center shadow-sm flex-shrink-0" style="width: 54px; height: 54px;">
+                                        <i class="bi bi-shield-check fs-3"></i>
+                                    </div>
+                                    <div>
+                                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                                            <span class="badge bg-success px-3 py-1 rounded-pill fw-semibold shadow-sm">
+                                                Status: Langganan Aktif
+                                            </span>
+                                            <span class="badge bg-white text-success border border-success-subtle px-3 py-1 rounded-pill fw-bold shadow-sm">
+                                                Sisa {{ $diffDays > 0 ? $diffDays . ' Hari Lagi' : 'Kurang dari 1 hari' }}
+                                            </span>
+                                        </div>
+                                        <h4 class="fw-bold text-dark mb-1">
+                                            Masa Aktif Sampai: {{ $expiresAt->translatedFormat('d F Y') }}
+                                            <span class="fs-6 fw-normal text-secondary">({{ $expiresAt->format('H:i') }} WIB)</span>
+                                        </h4>
+                                        <p class="text-secondary small mb-0">
+                                            Akses CAT & modul Anda masih aktif. Membeli paket baru di bawah akan otomatis <strong>mengakumulasikan</strong> sisa masa aktif langganan Anda saat ini.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="text-md-end flex-shrink-0">
+                                    <a href="{{ route('subscription.history') }}" class="btn btn-outline-success rounded-pill px-4 py-2 fw-semibold shadow-sm text-nowrap">
+                                        <i class="bi bi-receipt me-1"></i> Riwayat Transaksi
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
                 <div class="row g-4 justify-content-center">
                     @foreach ($packages as $pkg)
                         <div class="col-md-6">
