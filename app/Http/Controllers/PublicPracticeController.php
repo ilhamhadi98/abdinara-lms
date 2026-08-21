@@ -93,7 +93,13 @@ class PublicPracticeController extends Controller
      */
     public function sitemap()
     {
-        $baseUrl = rtrim(config('app.url', 'https://cat.abdinara.id'), '/');
+        $baseUrl = rtrim(request()->getSchemeAndHttpHost(), '/');
+        if (str_contains($baseUrl, 'localhost') || str_contains($baseUrl, '127.0.0.1')) {
+            $configUrl = rtrim(config('app.url', 'https://cat.abdinara.id'), '/');
+            $baseUrl = (str_contains($configUrl, 'localhost') || str_contains($configUrl, '127.0.0.1'))
+                ? 'https://cat.abdinara.id'
+                : $configUrl;
+        }
         $now = now()->toAtomString();
 
         $categories = Category::with('subtopics')->get();
