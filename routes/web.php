@@ -1,8 +1,9 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\TryoutSessionController;
+use App\Http\Controllers\PublicPracticeController;
 use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\TryoutSessionController;
 use App\Livewire\TryoutEngine;
 use App\Livewire\TryoutList;
 use App\Livewire\TryoutResult;
@@ -11,6 +12,12 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+// Programmatic SEO & Free Practice Hub (Public Access)
+Route::get('/latihan-soal', [PublicPracticeController::class, 'index'])->name('practice.index');
+Route::get('/latihan-soal/{categorySlug}', [PublicPracticeController::class, 'category'])->name('practice.category');
+Route::get('/latihan-soal/{categorySlug}/{subtopicSlug}', [PublicPracticeController::class, 'subtopic'])->name('practice.subtopic');
+Route::get('/sitemap.xml', [PublicPracticeController::class, 'sitemap'])->name('sitemap');
 
 Route::get('/dashboard', function () {
     $user = Illuminate\Support\Facades\Auth::user();

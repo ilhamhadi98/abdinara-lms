@@ -14,6 +14,7 @@
             <a class="brand" href="#beranda">Abdi<span>nara</span>.id</a>
             <nav class="main-nav">
                 <a href="#beranda">Beranda</a>
+                <a href="{{ route('practice.index') }}">Latihan Soal</a>
                 <a href="#tentang">Tentang</a>
                 <a href="#program">Program</a>
                 <a href="#keunggulan">Keunggulan</a>

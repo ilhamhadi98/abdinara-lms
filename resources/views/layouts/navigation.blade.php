@@ -1,86 +1,113 @@
 <nav x-data="{ open: false }" class="dash-nav">
     <div class="container dash-nav-wrap">
-        <a class="brand" href="{{ route('dashboard') }}">Abdi<span>nara</span>.id</a>
+        <a class="brand" href="{{ Auth::check() ? route('dashboard') : url('/') }}">Abdi<span>nara</span>.id</a>
 
         <div class="dash-nav-links">
-            <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">Dashboard</a>
+            @auth
+                <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">Dashboard</a>
 
-            {{-- Menu Member: Tryout --}}
-            @if (Auth::user()->can('take tryout') || Auth::user()->hasAnyRole(['admin', 'super-admin', 'member']))
-                <a href="{{ route('tryout.index') }}"
-                    class="{{ request()->routeIs('tryout.index') ? 'active' : '' }}">Tryout</a>
-                <a href="{{ route('tryout.results') }}"
-                    class="{{ request()->routeIs('tryout.results*') ? 'active' : '' }}">Hasil Saya</a>
-            @endif
+                {{-- Menu Member: Tryout --}}
+                @if (Auth::user()->can('take tryout') || Auth::user()->hasAnyRole(['admin', 'super-admin', 'member']))
+                    <a href="{{ route('tryout.index') }}"
+                        class="{{ request()->routeIs('tryout.index') ? 'active' : '' }}">Tryout</a>
+                    <a href="{{ route('tryout.results') }}"
+                        class="{{ request()->routeIs('tryout.results*') ? 'active' : '' }}">Hasil Saya</a>
+                @endif
 
-            {{-- Menu Admin → Filament Panel --}}
-            @role('admin|super-admin')
-                <span class="dash-nav-divider">|</span>
-                <a href="/admin" class="{{ request()->is('admin*') ? 'active' : '' }}">⚙️ Admin Panel</a>
-            @endrole
+                {{-- Menu Admin → Filament Panel --}}
+                @role('admin|super-admin')
+                    <span class="dash-nav-divider">|</span>
+                    <a href="/admin" class="{{ request()->is('admin*') ? 'active' : '' }}">⚙️ Admin Panel</a>
+                @endrole
 
-            <a href="{{ route('subscription.index') }}"
-                class="{{ request()->routeIs('subscription.index') ? 'active' : '' }}">Paket Premium</a>
+                <a href="{{ route('practice.index') }}"
+                    class="{{ request()->routeIs('practice.*') ? 'active' : '' }}">Latihan Soal</a>
 
-            <a href="{{ route('subscription.history') }}"
-                class="{{ request()->routeIs('subscription.history') ? 'active' : '' }}">Riwayat Langganan</a>
+                <a href="{{ route('subscription.index') }}"
+                    class="{{ request()->routeIs('subscription.index') ? 'active' : '' }}">Paket Premium</a>
 
-            <a href="{{ route('profile.edit') }}"
-                class="{{ request()->routeIs('profile.edit') ? 'active' : '' }}">Profil</a>
+                <a href="{{ route('subscription.history') }}"
+                    class="{{ request()->routeIs('subscription.history') ? 'active' : '' }}">Riwayat Langganan</a>
+
+                <a href="{{ route('profile.edit') }}"
+                    class="{{ request()->routeIs('profile.edit') ? 'active' : '' }}">Profil</a>
+            @else
+                <a href="{{ url('/') }}">Beranda</a>
+                <a href="{{ route('practice.index') }}" class="{{ request()->routeIs('practice.*') ? 'active' : '' }}">Latihan Soal</a>
+                <a href="{{ route('subscription.index') }}">Paket Premium</a>
+            @endauth
         </div>
 
-        <div class="dash-user" style="display: flex; align-items: center; gap: 1rem;">
+        <div class="dash-user" style="display: flex; align-items: center; gap: 0.75rem;">
             <button class="btn btn-ghost p-1 text-secondary" id="themeSwitcher" title="Ganti Tema"
                 onclick="toggleTheme()">
                 <i class="bi bi-moon-stars" id="themeIcon"></i>
             </button>
-            <span class="user-chip">{{ Auth::user()->name }}</span>
-            <form method="POST" action="{{ route('logout') }}" style="margin: 0;">
-                @csrf
-                <button type="submit" class="btn btn-ghost">Keluar</button>
-            </form>
-        </div>
-
-        <div style="display: flex; gap: 0.5rem" class="d-none d-lg-flex">
-            <button class="btn btn-ghost p-1 text-secondary" id="themeSwitcher" title="Ganti Tema"
-                onclick="toggleTheme()">
-                <i class="bi bi-moon-stars" id="themeIcon"></i>
-            </button>
+            @auth
+                <span class="user-chip">{{ Auth::user()->name }}</span>
+                <form method="POST" action="{{ route('logout') }}" style="margin: 0;">
+                    @csrf
+                    <button type="submit" class="btn btn-ghost">Keluar</button>
+                </form>
+            @else
+                <a href="{{ route('login') }}" class="btn btn-ghost">Masuk</a>
+                <a href="{{ route('register') }}" class="btn btn-primary">Daftar</a>
+            @endauth
         </div>
     </div>
 </nav>
 
 {{-- Mobile Bottom Navigation --}}
 <div class="dash-bottom-nav d-lg-none">
-    <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
-        <i class="bi bi-house{{ request()->routeIs('dashboard') ? '-fill' : '' }}"></i>
-        <span>Beranda</span>
-    </a>
-
-    @if (Auth::user()->can('take tryout') || Auth::user()->hasAnyRole(['admin', 'super-admin', 'member']))
-        <a href="{{ route('tryout.index') }}" class="{{ request()->routeIs('tryout.index') ? 'active' : '' }}">
-            <i class="bi bi-file-earmark-text{{ request()->routeIs('tryout.index') ? '-fill' : '' }}"></i>
-            <span>Tryout</span>
+    @auth
+        <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
+            <i class="bi bi-house{{ request()->routeIs('dashboard') ? '-fill' : '' }}"></i>
+            <span>Beranda</span>
         </a>
-    @endif
 
-    <a href="{{ route('subscription.index') }}" class="{{ request()->routeIs('subscription.*') ? 'active' : '' }}">
-        <i class="bi bi-star{{ request()->routeIs('subscription.*') ? '-fill' : '' }}"></i>
-        <span>Premium</span>
-    </a>
+        @if (Auth::user()->can('take tryout') || Auth::user()->hasAnyRole(['admin', 'super-admin', 'member']))
+            <a href="{{ route('tryout.index') }}" class="{{ request()->routeIs('tryout.index') ? 'active' : '' }}">
+                <i class="bi bi-file-earmark-text{{ request()->routeIs('tryout.index') ? '-fill' : '' }}"></i>
+                <span>Tryout</span>
+            </a>
+        @endif
 
-    <a href="{{ route('profile.edit') }}" class="{{ request()->routeIs('profile.edit') ? 'active' : '' }}">
-        <i class="bi bi-person{{ request()->routeIs('profile.edit') ? '-fill' : '' }}"></i>
-        <span>Profil</span>
-    </a>
+        <a href="{{ route('practice.index') }}" class="{{ request()->routeIs('practice.*') ? 'active' : '' }}">
+            <i class="bi bi-journal-text{{ request()->routeIs('practice.*') ? '-fill' : '' }}"></i>
+            <span>Soal</span>
+        </a>
 
-    <a href="#" data-bs-toggle="offcanvas" data-bs-target="#mobileMenuOffcanvas">
-        <i class="bi bi-grid"></i>
-        <span>Menu</span>
-    </a>
+        <a href="{{ route('subscription.index') }}" class="{{ request()->routeIs('subscription.*') ? 'active' : '' }}">
+            <i class="bi bi-star{{ request()->routeIs('subscription.*') ? '-fill' : '' }}"></i>
+            <span>Premium</span>
+        </a>
+
+        <a href="#" data-bs-toggle="offcanvas" data-bs-target="#mobileMenuOffcanvas">
+            <i class="bi bi-grid"></i>
+            <span>Menu</span>
+        </a>
+    @else
+        <a href="{{ url('/') }}">
+            <i class="bi bi-house-fill"></i>
+            <span>Beranda</span>
+        </a>
+        <a href="{{ route('practice.index') }}" class="{{ request()->routeIs('practice.*') ? 'active' : '' }}">
+            <i class="bi bi-journal-text"></i>
+            <span>Soal</span>
+        </a>
+        <a href="{{ route('subscription.index') }}">
+            <i class="bi bi-star"></i>
+            <span>Paket</span>
+        </a>
+        <a href="{{ route('login') }}">
+            <i class="bi bi-box-arrow-in-right"></i>
+            <span>Masuk</span>
+        </a>
+    @endauth
 </div>
 
 <!-- Extra Mobile Menu Offcanvas -->
+@auth
 <div class="offcanvas offcanvas-bottom" tabindex="-1" id="mobileMenuOffcanvas"
     aria-labelledby="mobileMenuOffcanvasLabel"
     style="height: auto; border-top-left-radius: 1.5rem; border-top-right-radius: 1.5rem; margin-bottom: 74px; z-index: 1055;">
@@ -131,6 +158,7 @@
         </form>
     </div>
 </div>
+@endauth
 
 <script>
     function updateThemeIcon(theme) {
