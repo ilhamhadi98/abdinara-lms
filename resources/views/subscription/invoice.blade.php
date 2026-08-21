@@ -13,18 +13,18 @@
                     <!-- Invoice Header -->
                     <div class="d-flex justify-content-between align-items-center border-bottom pb-4 mb-4">
                         <div class="d-flex align-items-center gap-3">
-                            <div class="bg-primary text-white rounded p-3 d-flex align-items-center justify-content-center"
-                                style="width: 50px; height: 50px;">
-                                <i class="bi bi-briefcase-fill fs-3"></i>
-                            </div>
+                            <img src="{{ asset('icon-192.png') }}" alt="Abdinara Logo"
+                                class="rounded-3 shadow-sm" style="width: 52px; height: 52px; object-fit: cover;"
+                                onerror="this.onerror=null; this.src='{{ asset('favicon.ico') }}';">
                             <div>
-                                <h3 class="fw-bolder mb-0" style="color: #1e3a8a; letter-spacing: -0.5px;">ABDINARA.ID
+                                <h3 class="fw-bolder mb-0 brand fs-3" style="color: #0a2647; letter-spacing: -0.5px;">
+                                    Abdi<span style="color: #d4af37;">nara</span>.id
                                 </h3>
-                                <p class="text-body-secondary mb-0 small" style="margin-top: -2px;">LMS Portal Resmi</p>
+                                <p class="text-body-secondary mb-0 small fw-medium" style="margin-top: -2px;">LMS Portal Resmi</p>
                             </div>
                         </div>
                         <div class="text-end">
-                            <h2 class="fw-bolder text-uppercase mb-1" style="color: #1e3a8a;">INVOICE</h2>
+                            <h2 class="fw-bolder text-uppercase mb-1" style="color: #0a2647; letter-spacing: 1px;">INVOICE</h2>
                             <p class="text-body-secondary fw-semibold mb-0">#{{ $transaction->order_id }}</p>
                         </div>
                     </div>
@@ -47,13 +47,9 @@
                                 <p class="text-muted fw-bold mb-1 small text-uppercase" style="letter-spacing: 1px;">
                                     Status Pembayaran:</p>
                                 @if ($transaction->status == 'success')
-                                    <span
-                                        class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-3 py-2 fw-bold fs-6">LUNAS
-                                        / BERHASIL</span>
+                                    <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-3 py-2 fw-bold fs-6">LUNAS / BERHASIL</span>
                                 @else
-                                    <span
-                                        class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 px-3 py-2 fw-bold fs-6">MENUNGGU
-                                        / {{ strtoupper($transaction->status) }}</span>
+                                    <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 px-3 py-2 fw-bold fs-6">MENUNGGU / {{ strtoupper($transaction->status) }}</span>
                                 @endif
                                 <p class="text-body-secondary small mt-1 mb-0">via
                                     {{ strtoupper(str_replace('_', ' ', $transaction->payment_type)) }}</p>
@@ -126,11 +122,14 @@
             </div>
 
             <!-- Floating Actions -->
-            <div class="col-lg-8 mt-4 d-flex justify-content-center gap-3 no-print">
+            <div class="col-lg-8 mt-4 d-flex justify-content-center gap-3 no-print flex-wrap">
                 <a href="{{ route('subscription.history') }}"
                     class="btn btn-outline-secondary rounded-pill fw-bold bg-white shadow-sm px-4">
                     <i class="bi bi-arrow-left"></i> Kembali
                 </a>
+                <button type="button" onclick="window.print()" class="btn btn-outline-primary rounded-pill fw-bold bg-white shadow-sm px-4">
+                    <i class="bi bi-printer"></i> Cetak / PDF
+                </button>
                 <button type="button" id="btn-download" class="btn btn-primary rounded-pill fw-bold shadow px-4">
                     <i class="bi bi-download"></i> Download Gambar (PNG)
                 </button>
@@ -139,22 +138,51 @@
         </div>
     </div>
 
+    @push('styles')
+        <style>
+            @media print {
+                .dash-nav, .dash-bottom-nav, .no-print, header, #themeSwitcher {
+                    display: none !important;
+                }
+                body {
+                    background: #ffffff !important;
+                    color: #000000 !important;
+                    padding: 0 !important;
+                    margin: 0 !important;
+                }
+                .container {
+                    width: 100% !important;
+                    max-width: 100% !important;
+                    padding: 0 !important;
+                    margin: 0 !important;
+                }
+                #invoiceArea {
+                    width: 100% !important;
+                    max-width: 100% !important;
+                    flex: 0 0 100% !important;
+                }
+                .card {
+                    border: 1px solid #e2e8f0 !important;
+                    box-shadow: none !important;
+                    padding: 2rem !important;
+                }
+            }
+        </style>
+    @endpush
+
     @push('scripts')
         <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
         <script>
             document.getElementById('btn-download').addEventListener('click', function() {
                 const invoiceArea = document.getElementById('invoiceArea');
 
-                // Tambahkan class sementara untuk mengatur lebar elemen agak besar jika diperlukan, atau ganti bg warnanya
-                const originalBg = invoiceArea.style.backgroundColor;
-
                 // Mulai konversi
                 html2canvas(invoiceArea, {
                     scale: 2, // Biar resolusi tinggi
                     useCORS: true,
-                    backgroundColor: '#ffffff' // Ensure it's white to avoid transparency issues
+                    allowTaint: true,
+                    backgroundColor: '#ffffff'
                 }).then(canvas => {
-                    // Reset
                     let link = document.createElement('a');
                     link.download = 'Invoice_{{ $transaction->order_id }}.png';
                     link.href = canvas.toDataURL('image/png');

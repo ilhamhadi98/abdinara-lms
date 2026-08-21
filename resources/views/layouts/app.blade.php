@@ -30,6 +30,7 @@
 
     @livewireStyles
     <link rel="stylesheet" href="{{ asset('css/dark-mode-patch.css') }}">
+    @stack('styles')
 
     <script>
         const getPreferredTheme = () => {
