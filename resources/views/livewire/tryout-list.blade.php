@@ -116,38 +116,18 @@
             @endforeach
         </div>
 
-        {{-- Pagination & Jump to Page Section --}}
+        {{-- Pagination Section --}}
         @if ($tryouts->hasPages())
-            <div class="card border-0 shadow-sm rounded-4 p-3 mt-4 bg-light-subtle">
-                <div class="d-flex flex-column flex-md-row align-items-center justify-content-between gap-3">
-                    {{-- Page Summary --}}
-                    <div class="small text-secondary fw-medium">
-                        Halaman <strong>{{ $tryouts->currentPage() }}</strong> dari <strong>{{ $tryouts->lastPage() }}</strong> 
-                        <span class="text-muted">({{ $tryouts->total() }} total tryout)</span>
-                    </div>
-
-                    {{-- Main Pagination Links --}}
-                    <div class="d-flex justify-content-center">
-                        {{ $tryouts->links() }}
-                    </div>
-
-                    {{-- Jump to Page Input Form --}}
-                    <form wire:submit.prevent="jumpToPage" class="d-flex align-items-center gap-2">
-                        <label for="jumpPageInput" class="small text-secondary text-nowrap mb-0">Lompat ke:</label>
-                        <div class="input-group input-group-sm" style="width: 110px;">
-                            <input type="number"
-                                id="jumpPageInput"
-                                wire:model="jumpPage"
-                                min="1"
-                                max="{{ $tryouts->lastPage() }}"
-                                class="form-control form-control-sm text-center rounded-start-pill"
-                                placeholder="{{ $tryouts->currentPage() }}">
-                            <button type="submit" class="btn btn-primary btn-sm rounded-end-pill px-2">
-                                Go
-                            </button>
-                        </div>
-                    </form>
+            <div class="mt-4 pt-2 text-center">
+                {{-- Pagination Links --}}
+                <div class="d-flex justify-content-center mb-2">
+                    {{ $tryouts->links('components.tryout-pagination') }}
                 </div>
+
+                {{-- Showing Results Text Underneath --}}
+                <p class="text-secondary small mb-0">
+                    Showing <strong>{{ $tryouts->firstItem() }}</strong> to <strong>{{ $tryouts->lastItem() }}</strong> of <strong>{{ $tryouts->total() }}</strong> results
+                </p>
             </div>
         @endif
     @endif

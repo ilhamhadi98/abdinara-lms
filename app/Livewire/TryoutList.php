@@ -18,8 +18,6 @@ class TryoutList extends Component
     #[Url(history: true)]
     public string $search = '';
 
-    public ?int $jumpPage = null;
-
     public function updatedSearch(): void
     {
         $this->resetPage();
@@ -29,14 +27,6 @@ class TryoutList extends Component
     {
         $this->search = '';
         $this->resetPage();
-    }
-
-    public function jumpToPage(): void
-    {
-        if ($this->jumpPage !== null && $this->jumpPage >= 1) {
-            $this->setPage((int) $this->jumpPage);
-            $this->jumpPage = null;
-        }
     }
 
     public function startTryout(int $tryoutId): void
@@ -107,7 +97,6 @@ class TryoutList extends Component
             'tryouts'    => $tryouts,
             'mySessions' => $mySessions,
             'search'     => $this->search,
-            'jumpPage'   => $this->jumpPage,
         ])->layout('layouts.app');
     }
 }

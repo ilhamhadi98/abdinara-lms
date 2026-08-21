@@ -71,10 +71,9 @@ class TryoutListPaginationAndSearchTest extends TestCase
         $response->assertSee('Tryout CAT Nomor 36');
         $response->assertDontSee('Tryout CAT Nomor 01');
 
-        // Test Livewire component jumping to page 3
+        // Test Livewire component navigation to page 3
         Livewire::test(TryoutList::class)
-            ->set('jumpPage', 3)
-            ->call('jumpToPage')
+            ->call('gotoPage', 3)
             ->assertSee('Tryout CAT Nomor 25')
             ->assertSee('Tryout CAT Nomor 36')
             ->assertDontSee('Tryout CAT Nomor 01');
