@@ -6,12 +6,12 @@
             <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">Dashboard</a>
 
             {{-- Menu Member: Tryout --}}
-            @can('take tryout')
+            @if (Auth::user()->can('take tryout') || Auth::user()->hasAnyRole(['admin', 'super-admin', 'member']))
                 <a href="{{ route('tryout.index') }}"
                     class="{{ request()->routeIs('tryout.index') ? 'active' : '' }}">Tryout</a>
                 <a href="{{ route('tryout.results') }}"
                     class="{{ request()->routeIs('tryout.results*') ? 'active' : '' }}">Hasil Saya</a>
-            @endcan
+            @endif
 
             {{-- Menu Admin → Filament Panel --}}
             @role('admin|super-admin')
@@ -57,12 +57,12 @@
         <span>Beranda</span>
     </a>
 
-    @can('take tryout')
+    @if (Auth::user()->can('take tryout') || Auth::user()->hasAnyRole(['admin', 'super-admin', 'member']))
         <a href="{{ route('tryout.index') }}" class="{{ request()->routeIs('tryout.index') ? 'active' : '' }}">
             <i class="bi bi-file-earmark-text{{ request()->routeIs('tryout.index') ? '-fill' : '' }}"></i>
             <span>Tryout</span>
         </a>
-    @endcan
+    @endif
 
     <a href="{{ route('subscription.index') }}" class="{{ request()->routeIs('subscription.*') ? 'active' : '' }}">
         <i class="bi bi-star{{ request()->routeIs('subscription.*') ? '-fill' : '' }}"></i>
@@ -96,12 +96,12 @@
         </div>
 
         <div class="list-group list-group-flush mb-3 rounded border">
-            @can('take tryout')
+            @if (Auth::user()->can('take tryout') || Auth::user()->hasAnyRole(['admin', 'super-admin', 'member']))
                 <a href="{{ route('tryout.results') }}"
                     class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3">
                     <i class="bi bi-graph-up text-primary"></i> <span class="fw-medium">Hasil & Analisis Saya</span>
                 </a>
-            @endcan
+            @endif
 
             <a href="{{ route('subscription.history') }}"
                 class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3">

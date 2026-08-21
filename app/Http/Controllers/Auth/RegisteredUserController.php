@@ -29,12 +29,17 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
+        $rules = [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'g-recaptcha-response' => ['required', new \App\Rules\ReCaptcha()],
-        ], [
+        ];
+
+        if (! app()->runningUnitTests() && ! empty(config('services.recaptcha.secret_key'))) {
+            $rules['g-recaptcha-response'] = ['required', new \App\Rules\ReCaptcha()];
+        }
+
+        $request->validate($rules, [
             'g-recaptcha-response.required' => 'Verifikasi reCAPTCHA wajib diisi.',
         ]);
 

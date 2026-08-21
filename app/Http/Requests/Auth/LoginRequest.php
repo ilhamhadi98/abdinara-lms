@@ -26,11 +26,16 @@ class LoginRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        $rules = [
             'email' => ['required', 'string', 'email'],
             'password' => ['required', 'string'],
-            'g-recaptcha-response' => ['required', new \App\Rules\ReCaptcha()],
         ];
+
+        if (! app()->runningUnitTests() && ! empty(config('services.recaptcha.secret_key'))) {
+            $rules['g-recaptcha-response'] = ['required', new \App\Rules\ReCaptcha()];
+        }
+
+        return $rules;
     }
 
     /**
