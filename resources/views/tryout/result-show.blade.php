@@ -164,16 +164,17 @@
 
                                 {{-- Explanation --}}
                                 @if ($answer->question?->explanation)
-                                    <div>
+                                    <div x-data="{ open: false }" class="mt-2">
                                         <button
+                                            @click="open = !open"
                                             class="btn btn-link text-decoration-none p-0 text-primary fw-bold d-flex align-items-center gap-2"
-                                            type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#explanation-{{ $i }}" aria-expanded="false">
-                                            <i class="bi bi-lightbulb"></i> Lihat Pembahasan
-                                            <i class="bi bi-chevron-down small transition-transform"></i>
+                                            type="button">
+                                            <i class="bi bi-lightbulb"></i>
+                                            <span x-text="open ? 'Sembunyikan Pembahasan' : 'Lihat Pembahasan'">Lihat Pembahasan</span>
+                                            <i class="bi bi-chevron-down small transition-transform" :class="{ 'rotate-180': open }"></i>
                                         </button>
 
-                                        <div class="collapse mt-3" id="explanation-{{ $i }}">
+                                        <div x-show="open" x-cloak class="mt-3" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 transform -translate-y-2" x-transition:enter-end="opacity-100 transform translate-y-0">
                                             <div
                                                 class="bg-primary bg-opacity-10 p-4 rounded-4 border-start border-primary border-4">
                                                 <h6 class="text-primary fw-bold mb-2">Pembahasan Lengkap:</h6>
