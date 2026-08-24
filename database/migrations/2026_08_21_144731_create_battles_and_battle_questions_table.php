@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('player2_id')->nullable()->constrained('users')->nullOnDelete();
             $table->string('player2_name')->nullable();
             $table->boolean('is_bot')->default(false);
-            $table->enum('status', ['waiting', 'active', 'finished'])->default('waiting');
+            $table->enum('status', ['waiting', 'active', 'finished', 'cancelled'])->default('waiting');
             $table->foreignId('winner_id')->nullable()->constrained('users')->nullOnDelete();
             $table->string('winner_name')->nullable();
             $table->integer('player1_score')->default(0);
