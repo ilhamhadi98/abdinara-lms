@@ -81,6 +81,10 @@ class BattleController extends Controller
             return back()->with('error', 'Sesi duel ini sudah selesai.');
         }
 
+        if ($battle->status === 'cancelled') {
+            return back()->with('error', 'Room duel ini telah dibatalkan atau kedaluwarsa.');
+        }
+
         if ($battle->player1_id !== Auth::id() && !$battle->player2_id) {
             $battle->update([
                 'player2_id' => Auth::id(),
@@ -92,11 +96,23 @@ class BattleController extends Controller
     }
 
     /**
-     * Direct link join.
+     * Direct link join via room code URL.
      */
     public function joinDirect(string $roomCode)
     {
-        $battle = Battle::where('room_code', strtoupper($roomCode))->firstOrFail();
+        $battle = Battle::where('room_code', strtoupper($roomCode))->first();
+
+        if (!$battle) {
+            return redirect()->route('battle.index')->with('error', 'Kode room duel tidak ditemukan.');
+        }
+
+        if ($battle->status === 'finished') {
+            return redirect()->route('battle.index')->with('error', 'Sesi duel ini sudah selesai.');
+        }
+
+        if ($battle->status === 'cancelled') {
+            return redirect()->route('battle.index')->with('error', 'Room duel ini telah dibatalkan atau kedaluwarsa.');
+        }
 
         if ($battle->player1_id !== Auth::id() && !$battle->player2_id && $battle->status === 'waiting') {
             $battle->update([
@@ -117,6 +133,7 @@ class BattleController extends Controller
         $openBattle = Battle::where('status', 'waiting')
             ->where('player1_id', '!=', Auth::id())
             ->whereNull('player2_id')
+            ->where('created_at', '>=', now()->subMinutes(5))
             ->latest('id')
             ->first();
 
@@ -155,9 +172,22 @@ class BattleController extends Controller
      */
     public function arena(Battle $battle)
     {
-        // Authorization: Player1 or Player2
+        if ($battle->status === 'cancelled') {
+            return redirect()->route('battle.index')->with('error', 'Room duel ini telah dibatalkan atau kedaluwarsa.');
+        }
+
+        // Auto join if waiting and open
+        if ($battle->status === 'waiting' && $battle->player1_id !== Auth::id() && !$battle->player2_id) {
+            $battle->update([
+                'player2_id' => Auth::id(),
+                'status' => 'active',
+            ]);
+            $battle->refresh();
+        }
+
+        // Authorization: Player1 or Player2 or Admin
         if ($battle->player1_id !== Auth::id() && $battle->player2_id !== Auth::id() && !Auth::user()->hasAnyRole(['admin', 'super-admin'])) {
-            abort(403);
+            return redirect()->route('battle.index')->with('error', 'Room duel ini sudah penuh atau Anda tidak memiliki akses.');
         }
 
         $battle->load('player1', 'player2', 'questions');

@@ -20,11 +20,27 @@ class BattleArena extends Component
     public ?string $winnerName = null;
     public array $questionList = [];
 
+    // Waiting Room State
+    public bool $isWaitingForOpponent = false;
+    public int $waitingSecondsLeft = 300;
+
     public function mount(Battle $battle)
     {
         $this->battle = $battle;
         $this->player1Score = (int) ($battle->player1_score ?? 0);
         $this->player2Score = (int) ($battle->player2_score ?? 0);
+
+        // Check if waiting for opponent (Player 1 created a room and opponent has not joined)
+        if ($battle->status === 'waiting' && !$battle->player2_id) {
+            $this->isWaitingForOpponent = true;
+            $elapsed = (int) now()->diffInSeconds($battle->created_at);
+            $this->waitingSecondsLeft = max(0, 300 - $elapsed);
+
+            if ($this->waitingSecondsLeft <= 0) {
+                $this->cancelBattleDueToTimeout();
+                return;
+            }
+        }
 
         $questions = $battle->questions()->get();
         foreach ($questions as $q) {
@@ -48,9 +64,51 @@ class BattleArena extends Component
         }
     }
 
+    /**
+     * Poll every 2s while in waiting room to check if opponent joined or timeout.
+     */
+    public function checkOpponentJoined()
+    {
+        if (!$this->isWaitingForOpponent) {
+            return;
+        }
+
+        $this->battle->refresh();
+
+        if ($this->battle->status === 'cancelled') {
+            return redirect()->route('battle.index')->with('error', 'Room duel telah dibatalkan.');
+        }
+
+        // Opponent has joined!
+        if ($this->battle->player2_id || $this->battle->status === 'active') {
+            $this->isWaitingForOpponent = false;
+            $this->battle->status = 'active';
+            return;
+        }
+
+        $elapsed = (int) now()->diffInSeconds($this->battle->created_at);
+        $this->waitingSecondsLeft = max(0, 300 - $elapsed);
+
+        if ($this->waitingSecondsLeft <= 0) {
+            return $this->cancelBattleDueToTimeout();
+        }
+    }
+
+    public function cancelRoom()
+    {
+        $this->battle->update(['status' => 'cancelled']);
+        return redirect()->route('battle.index')->with('info', 'Room duel telah dibatalkan.');
+    }
+
+    public function cancelBattleDueToTimeout()
+    {
+        $this->battle->update(['status' => 'cancelled']);
+        return redirect()->route('battle.index')->with('error', 'Tidak ada lawan yang bergabung dalam 5 menit. Room telah ditutup otomatis.');
+    }
+
     public function selectAnswer(string $option)
     {
-        if ($this->isAnswered || $this->isFinished) {
+        if ($this->isWaitingForOpponent || $this->isAnswered || $this->isFinished) {
             return;
         }
 
@@ -130,6 +188,19 @@ class BattleArena extends Component
     public function render()
     {
         $currentQuestion = $this->questionList[$this->currentIndex] ?? null;
-        return view('livewire.battle-arena', compact('currentQuestion'));
+        return view('livewire.battle-arena', [
+            'currentQuestion' => $currentQuestion,
+            'isWaitingForOpponent' => $this->isWaitingForOpponent,
+            'waitingSecondsLeft' => $this->waitingSecondsLeft,
+            'isFinished' => $this->isFinished,
+            'isAnswered' => $this->isAnswered,
+            'selectedOption' => $this->selectedOption,
+            'lastCorrectAnswer' => $this->lastCorrectAnswer,
+            'winnerName' => $this->winnerName,
+            'player1Score' => $this->player1Score,
+            'player2Score' => $this->player2Score,
+            'currentIndex' => $this->currentIndex,
+            'questionList' => $this->questionList,
+        ]);
     }
 }
