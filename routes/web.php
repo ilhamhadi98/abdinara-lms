@@ -15,6 +15,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+if (app()->environment('local')) {
+    Route::get('/dev/login/{id?}', function ($id = 1) {
+        \Illuminate\Support\Facades\Auth::loginUsingId($id);
+        return redirect()->route('tryout.results');
+    });
+}
+
 // Programmatic SEO & Free Practice Hub (Public Access)
 Route::get('/latihan-soal', [PublicPracticeController::class, 'index'])->name('practice.index');
 Route::get('/latihan-soal/{categorySlug}', [PublicPracticeController::class, 'category'])->name('practice.category');
