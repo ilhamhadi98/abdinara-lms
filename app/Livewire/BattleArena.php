@@ -188,6 +188,19 @@ class BattleArena extends Component
     public function render()
     {
         $currentQuestion = $this->questionList[$this->currentIndex] ?? null;
-        return view('livewire.battle-arena', compact('currentQuestion'));
+        return view('livewire.battle-arena', [
+            'currentQuestion' => $currentQuestion,
+            'isWaitingForOpponent' => $this->isWaitingForOpponent,
+            'waitingSecondsLeft' => $this->waitingSecondsLeft,
+            'isFinished' => $this->isFinished,
+            'isAnswered' => $this->isAnswered,
+            'selectedOption' => $this->selectedOption,
+            'lastCorrectAnswer' => $this->lastCorrectAnswer,
+            'winnerName' => $this->winnerName,
+            'player1Score' => $this->player1Score,
+            'player2Score' => $this->player2Score,
+            'currentIndex' => $this->currentIndex,
+            'questionList' => $this->questionList,
+        ]);
     }
 }

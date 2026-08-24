@@ -1,5 +1,5 @@
-<div class="container py-4" style="max-width: 820px;" @if ($isWaitingForOpponent) wire:poll.2s="checkOpponentJoined" @endif>
-    @if ($isWaitingForOpponent)
+<div class="container py-4" style="max-width: 820px;" @if ($isWaitingForOpponent ?? false) wire:poll.2s="checkOpponentJoined" @endif>
+    @if ($isWaitingForOpponent ?? false)
         <!-- ========================================== -->
         <!-- WAITING ROOM (MENUNGGU LAWAN BERGABUNG)   -->
         <!-- ========================================== -->
