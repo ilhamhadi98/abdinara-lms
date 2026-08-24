@@ -89,6 +89,26 @@ class PublicPracticeController extends Controller
     }
 
     /**
+     * Display the interactive SKD passing grade & score calculator.
+     */
+    public function calculator()
+    {
+        return view('practice.calculator');
+    }
+
+    /**
+     * Display the comprehensive official Permenpan-RB 2026 guidelines and download hub.
+     */
+    public function kisiKisi()
+    {
+        $categories = Category::with(['subtopics' => function ($query) {
+            $query->withCount('questions');
+        }])->get();
+
+        return view('practice.kisi-kisi', compact('categories'));
+    }
+
+    /**
      * Generate dynamic sitemap.xml for Google Search Console and crawlers.
      */
     public function sitemap()
@@ -118,6 +138,24 @@ class PublicPracticeController extends Controller
             'lastmod' => $now,
             'changefreq' => 'daily',
             'priority' => '0.9',
+        ];
+        $urls[] = [
+            'loc' => $baseUrl . '/kalkulator-skd',
+            'lastmod' => $now,
+            'changefreq' => 'weekly',
+            'priority' => '0.9',
+        ];
+        $urls[] = [
+            'loc' => $baseUrl . '/kisi-kisi-cpns-2026',
+            'lastmod' => $now,
+            'changefreq' => 'weekly',
+            'priority' => '0.9',
+        ];
+        $urls[] = [
+            'loc' => $baseUrl . '/liga-tryout',
+            'lastmod' => $now,
+            'changefreq' => 'daily',
+            'priority' => '0.8',
         ];
         $urls[] = [
             'loc' => $baseUrl . '/tryout',

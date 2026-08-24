@@ -24,6 +24,8 @@ if (app()->environment('local')) {
 
 // Programmatic SEO & Free Practice Hub (Public Access)
 Route::get('/latihan-soal', [PublicPracticeController::class, 'index'])->name('practice.index');
+Route::get('/kalkulator-skd', [PublicPracticeController::class, 'calculator'])->name('practice.calculator');
+Route::get('/kisi-kisi-cpns-2026', [PublicPracticeController::class, 'kisiKisi'])->name('practice.kisi-kisi');
 Route::get('/latihan-soal/{categorySlug}', [PublicPracticeController::class, 'category'])->name('practice.category');
 Route::get('/latihan-soal/{categorySlug}/{subtopicSlug}', [PublicPracticeController::class, 'subtopic'])->name('practice.subtopic');
 Route::get('/sitemap.xml', [PublicPracticeController::class, 'sitemap'])->name('sitemap');

@@ -12,12 +12,18 @@
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <link rel="canonical" href="https://cat.abdinara.id/">
 
+    @if(config('services.google.site_verification'))
+        <meta name="google-site-verification" content="{{ config('services.google.site_verification') }}">
+    @endif
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://cat.abdinara.id/">
     <meta property="og:title" content="Latihan Soal CPNS 2026 & Simulasi Tryout CAT SKD Kedinasan Online Gratis | Abdinara.id">
     <meta property="og:description" content="Akses ribuan latihan soal TWK, TIU, TKP berstandar CAT BKN 2026 gratis beserta kunci jawaban dan pembahasan analitis di Abdinara LMS.">
-    <meta property="og:image" content="{{ asset('favicon.ico') }}">
+    <meta property="og:image" content="{{ asset('images/og-banner.png') }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
     <meta property="og:site_name" content="Abdinara LMS">
     <meta property="og:locale" content="id_ID">
 
@@ -26,7 +32,18 @@
     <meta name="twitter:url" content="https://cat.abdinara.id/">
     <meta name="twitter:title" content="Latihan Soal CPNS 2026 & Simulasi Tryout CAT SKD Kedinasan Online Gratis | Abdinara.id">
     <meta name="twitter:description" content="Platform latihan soal dan simulasi CAT SKD CPNS 2026 terlengkap sesuai kisi-kisi resmi Permenpan-RB.">
-    <meta name="twitter:image" content="{{ asset('favicon.ico') }}">
+    <meta name="twitter:image" content="{{ asset('images/og-banner.png') }}">
+
+    @if(config('services.google.gtag_id'))
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{ config('services.google.gtag_id') }}"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '{{ config('services.google.gtag_id') }}');
+        </script>
+    @endif
 
     <!-- Favicon & PWA -->
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
@@ -123,12 +140,12 @@
             <nav class="main-nav">
                 <a href="#beranda">Beranda</a>
                 <a href="{{ route('practice.index') }}">Latihan Soal</a>
+                <a href="{{ route('practice.calculator') }}" class="text-warning fw-bold">🧮 Kalkulator SKD</a>
+                <a href="{{ route('practice.kisi-kisi') }}">📜 Kisi-Kisi 2026</a>
                 <a href="{{ route('tournament.index') }}">🏆 Liga Tryout</a>
                 <a href="{{ route('battle.index') }}">⚔️ Duel 1 vs 1</a>
-                <a href="#tentang">Tentang</a>
-                <a href="#program">Program</a>
                 <a href="#keunggulan">Keunggulan</a>
-                <a href="#kontak">Kontak</a>
+                <a href="#faq">FAQ</a>
             </nav>
             <div class="auth-actions">
                 @auth

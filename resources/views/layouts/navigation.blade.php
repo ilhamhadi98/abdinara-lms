@@ -228,6 +228,30 @@
                     <i class="bi bi-chevron-right text-muted"></i>
                 </a>
 
+                <a href="{{ route('practice.calculator') }}"
+                    class="list-group-item list-group-item-action d-flex align-items-center justify-content-between py-3">
+                    <div class="d-flex align-items-center gap-3">
+                        <i class="bi bi-calculator text-primary fs-5"></i>
+                        <div>
+                            <span class="fw-bold text-body d-block">Kalkulator Skor SKD 2026</span>
+                            <small class="text-secondary">Hitung estimasi nilai & cek passing grade BKN</small>
+                        </div>
+                    </div>
+                    <i class="bi bi-chevron-right text-muted"></i>
+                </a>
+
+                <a href="{{ route('practice.kisi-kisi') }}"
+                    class="list-group-item list-group-item-action d-flex align-items-center justify-content-between py-3">
+                    <div class="d-flex align-items-center gap-3">
+                        <i class="bi bi-file-earmark-pdf text-danger fs-5"></i>
+                        <div>
+                            <span class="fw-bold text-body d-block">Kisi-Kisi Resmi Permenpan-RB</span>
+                            <small class="text-secondary">Panduan materi SKD & unduh ringkasan</small>
+                        </div>
+                    </div>
+                    <i class="bi bi-chevron-right text-muted"></i>
+                </a>
+
                 <a href="{{ route('tournament.index') }}"
                     class="list-group-item list-group-item-action d-flex align-items-center justify-content-between py-3">
                     <div class="d-flex align-items-center gap-3">

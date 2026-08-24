@@ -7,9 +7,24 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="theme-color" content="#1e40af">
 
+    @if(config('services.google.site_verification'))
+        <meta name="google-site-verification" content="{{ config('services.google.site_verification') }}">
+    @endif
+
     @stack('meta')
     @if (! View::hasSection('has_custom_title'))
         <title>@yield('title', 'Latihan Soal CPNS 2026 & Tryout CAT SKD Kedinasan - Abdinara.id')</title>
+    @endif
+
+    @if(config('services.google.gtag_id'))
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{ config('services.google.gtag_id') }}"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '{{ config('services.google.gtag_id') }}');
+        </script>
     @endif
 
     <!-- Favicon & PWA Icons -->
