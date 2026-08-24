@@ -71,7 +71,7 @@ class PublicSeoToolsTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('images/og-banner.png');
         $response->assertSee('Kalkulator SKD');
-        $response->assertSee('Kisi-Kisi 2026');
+        $response->assertSee('Kisi-Kisi Resmi 2026');
         $response->assertSee('https://schema.org', false);
         $response->assertSee('EducationalOrganization', false);
     }

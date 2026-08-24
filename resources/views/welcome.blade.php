@@ -134,25 +134,99 @@
 </head>
 
 <body class="lms-body">
-    <header class="site-header">
-        <div class="container nav-wrap">
-            <a class="brand" href="#beranda">Abdi<span>nara</span>.id</a>
-            <nav class="main-nav">
-                <a href="#beranda">Beranda</a>
-                <a href="{{ route('practice.index') }}">Latihan Soal</a>
-                <a href="{{ route('practice.calculator') }}" class="text-warning fw-bold">🧮 Kalkulator SKD</a>
-                <a href="{{ route('practice.kisi-kisi') }}">📜 Kisi-Kisi 2026</a>
-                <a href="{{ route('tournament.index') }}">🏆 Liga Tryout</a>
-                <a href="{{ route('battle.index') }}">⚔️ Duel 1 vs 1</a>
-                <a href="#keunggulan">Keunggulan</a>
-                <a href="#faq">FAQ</a>
+    <!-- Clean & Modern Header -->
+    <header class="site-header sticky-top bg-white border-bottom shadow-sm">
+        <div class="container py-2 d-flex align-items-center justify-content-between">
+            <a class="brand text-decoration-none d-flex align-items-center gap-1" href="{{ url('/') }}">
+                <span class="fs-4 fw-bold text-dark">Abdi<span class="text-warning">nara</span><span class="text-primary fs-6">.id</span></span>
+            </a>
+
+            <!-- Desktop Nav Menu -->
+            <nav class="d-none d-lg-flex align-items-center gap-3">
+                <a href="{{ url('/') }}" class="text-secondary text-decoration-none fw-semibold px-2 py-1">Beranda</a>
+
+                <!-- Dropdown Materi & Latihan -->
+                <div class="dropdown">
+                    <a class="text-secondary text-decoration-none fw-semibold dropdown-toggle d-flex align-items-center gap-1 px-2 py-1" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span>Latihan Soal</span>
+                    </a>
+                    <ul class="dropdown-menu border-0 shadow-lg rounded-4 p-2 mt-2" style="min-width: 270px;">
+                        <li>
+                            <a class="dropdown-item rounded-3 py-2 d-flex align-items-center gap-2" href="{{ route('practice.index') }}">
+                                <i class="bi bi-journal-text text-primary fs-5"></i>
+                                <div>
+                                    <strong class="d-block text-body">Bank Latihan Soal</strong>
+                                    <small class="text-secondary">Ribuan soal TWK, TIU, TKP</small>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item rounded-3 py-2 d-flex align-items-center gap-2" href="{{ route('practice.calculator') }}">
+                                <i class="bi bi-calculator text-success fs-5"></i>
+                                <div>
+                                    <strong class="d-block text-body">🧮 Kalkulator SKD</strong>
+                                    <small class="text-secondary">Hitung skor & passing grade BKN</small>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item rounded-3 py-2 d-flex align-items-center gap-2" href="{{ route('practice.kisi-kisi') }}">
+                                <i class="bi bi-file-earmark-pdf text-danger fs-5"></i>
+                                <div>
+                                    <strong class="d-block text-body">📜 Kisi-Kisi Resmi 2026</strong>
+                                    <small class="text-secondary">Panduan materi & cetak ringkasan</small>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Dropdown Kompetisi -->
+                <div class="dropdown">
+                    <a class="text-secondary text-decoration-none fw-semibold dropdown-toggle d-flex align-items-center gap-1 px-2 py-1" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span>Kompetisi</span>
+                    </a>
+                    <ul class="dropdown-menu border-0 shadow-lg rounded-4 p-2 mt-2" style="min-width: 260px;">
+                        <li>
+                            <a class="dropdown-item rounded-3 py-2 d-flex align-items-center justify-content-between" href="{{ route('tournament.index') }}">
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="bi bi-trophy-fill text-warning fs-5"></i>
+                                    <div>
+                                        <strong class="d-block text-body">🏆 Liga Tryout</strong>
+                                        <small class="text-secondary">Kompetisi mingguan nasional</small>
+                                    </div>
+                                </div>
+                                <span class="badge bg-danger rounded-pill">Event</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item rounded-3 py-2 d-flex align-items-center justify-content-between" href="{{ route('battle.index') }}">
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="bi bi-lightning-charge-fill text-danger fs-5"></i>
+                                    <div>
+                                        <strong class="d-block text-body">⚔️ Duel 1 vs 1</strong>
+                                        <small class="text-secondary">Tanding 10 soal lawan teman</small>
+                                    </div>
+                                </div>
+                                <span class="badge bg-warning text-dark rounded-pill">Duel</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <a href="#keunggulan" class="text-secondary text-decoration-none fw-semibold px-2 py-1">Keunggulan</a>
+                <a href="#faq" class="text-secondary text-decoration-none fw-semibold px-2 py-1">FAQ</a>
             </nav>
-            <div class="auth-actions">
+
+            <!-- Auth Actions -->
+            <div class="d-flex align-items-center gap-2">
                 @auth
-                    <a class="btn btn-ghost" href="{{ route('dashboard') }}">Dashboard</a>
+                    <a class="btn btn-warning rounded-pill px-4 fw-bold shadow-sm" href="{{ route('dashboard') }}">
+                        <i class="bi bi-grid-fill me-1"></i> Dashboard
+                    </a>
                 @else
-                    <a class="btn btn-ghost" href="{{ route('login') }}">Login</a>
-                    <a class="btn btn-primary" href="{{ route('register') }}">Register</a>
+                    <a class="btn btn-outline-secondary rounded-pill px-4 fw-bold" href="{{ route('login') }}">Masuk</a>
+                    <a class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm" href="{{ route('register') }}">Daftar Gratis</a>
                 @endauth
             </div>
         </div>
@@ -164,8 +238,8 @@
             <div class="container py-4">
                 <div class="row align-items-center g-5">
                     <div class="col-lg-7 text-white">
-                        <div class="d-inline-flex align-items-center gap-2 bg-warning bg-opacity-20 border border-warning border-opacity-25 rounded-pill px-3 py-1 mb-3">
-                            <span class="badge bg-warning text-dark rounded-pill fw-bold">Update 2026</span>
+                        <div class="d-inline-flex align-items-center gap-2 bg-dark bg-opacity-50 border border-warning border-opacity-50 rounded-pill px-3 py-1 mb-3">
+                            <span class="badge bg-warning text-dark rounded-pill fw-bold mb-0 px-2 py-1">Update 2026</span>
                             <span class="text-warning small fw-bold">Platform Latihan Soal CPNS & Tryout SKD No. 1</span>
                         </div>
                         
