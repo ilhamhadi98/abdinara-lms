@@ -30,10 +30,17 @@
         </div>
     </x-slot>
 
-    @push('styles')
-        <title>Kumpulan Soal {{ $catTitle }} SKD CPNS & Kedinasan 2026 - Abdinara.id</title>
+    @section('has_custom_title', true)
+    @push('meta')
+        <title>Kumpulan Latihan Soal {{ $catTitle }} CPNS 2026 & Pembahasan - Abdinara.id</title>
+        <meta name="title" content="Kumpulan Latihan Soal {{ $catTitle }} CPNS 2026 & Pembahasan - Abdinara.id">
         <meta name="description" content="Kumpulan contoh latihan soal {{ $catTitle }} terlengkap beserta kisi-kisi resmi dan pembahasan kunci jawaban. Latihan gratis persiapan ujian CPNS dan Sekolah Kedinasan di Abdinara.id.">
-        <link rel="canonical" href="{{ url('/latihan-soal/' . $catSlug) }}">
+        <meta name="keywords" content="soal {{ strtolower($category->name) }}, latihan {{ strtolower($category->name) }} cpns, kisi-kisi {{ strtolower($category->name) }} 2026, abdinara">
+        <link rel="canonical" href="https://cat.abdinara.id/latihan-soal/{{ $catSlug }}">
+        <meta property="og:title" content="Kumpulan Latihan Soal {{ $catTitle }} CPNS 2026 & Pembahasan - Abdinara.id">
+        <meta property="og:description" content="Kumpulan contoh latihan soal {{ $catTitle }} terlengkap beserta kisi-kisi resmi dan pembahasan kunci jawaban.">
+        <meta property="og:url" content="https://cat.abdinara.id/latihan-soal/{{ $catSlug }}">
+        <meta property="og:type" content="website">
     @endpush
 
     <div class="container py-4 mb-5">

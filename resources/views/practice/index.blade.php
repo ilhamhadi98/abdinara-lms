@@ -18,11 +18,17 @@
         </div>
     </x-slot>
 
-    @push('styles')
-        <title>Kumpulan Latihan Soal CPNS & Kedinasan 2026 Gratis Beserta Pembahasan - Abdinara.id</title>
-        <meta name="description" content="Bank latihan soal SKD CPNS dan Sekolah Kedinasan terlengkap 2026 (TWK, TIU, TKP) dengan kunci jawaban dan pembahasan lengkap sesuai kisi-kisi resmi Permenpan-RB di Abdinara.id.">
-        <meta name="keywords" content="soal cpns 2026, latihan soal kedinasan, simulasi cat gratis, soal twk hots, soal tiu deret angka, soal tkp pelayanan publik, abdinara">
-        <link rel="canonical" href="{{ url('/latihan-soal') }}">
+    @section('has_custom_title', true)
+    @push('meta')
+        <title>Bank Latihan Soal CPNS 2026 & Kisi-Kisi SKD Kedinasan Gratis - Abdinara.id</title>
+        <meta name="title" content="Bank Latihan Soal CPNS 2026 & Kisi-Kisi SKD Kedinasan Gratis - Abdinara.id">
+        <meta name="description" content="Kumpulan bank latihan soal SKD CPNS dan Sekolah Kedinasan terlengkap 2026 (TWK, TIU, TKP) dengan kunci jawaban dan pembahasan lengkap sesuai kisi-kisi resmi Permenpan-RB di Abdinara.id.">
+        <meta name="keywords" content="latihan soal cpns 2026, latihan cpns, soal kedinasan, simulasi cat gratis, soal twk hots, soal tiu deret angka, soal tkp pelayanan publik, abdinara">
+        <link rel="canonical" href="https://cat.abdinara.id/latihan-soal">
+        <meta property="og:title" content="Bank Latihan Soal CPNS 2026 & Kisi-Kisi SKD Kedinasan Gratis - Abdinara.id">
+        <meta property="og:description" content="Bank latihan soal SKD CPNS terlengkap (TWK, TIU, TKP) dengan kunci jawaban dan pembahasan analitis.">
+        <meta property="og:url" content="https://cat.abdinara.id/latihan-soal">
+        <meta property="og:type" content="website">
     @endpush
 
     <div class="container py-4 mb-5">

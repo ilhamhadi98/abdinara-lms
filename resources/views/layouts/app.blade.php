@@ -7,7 +7,10 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="theme-color" content="#1e40af">
 
-    <title>{{ config('app.name', 'Abdinara') }}</title>
+    @stack('meta')
+    @if (! View::hasSection('has_custom_title'))
+        <title>@yield('title', 'Latihan Soal CPNS 2026 & Tryout CAT SKD Kedinasan - Abdinara.id')</title>
+    @endif
 
     <!-- Favicon & PWA Icons -->
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">

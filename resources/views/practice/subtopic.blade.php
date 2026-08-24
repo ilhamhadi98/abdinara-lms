@@ -27,16 +27,18 @@
         </div>
     </x-slot>
 
-    @push('styles')
+    @section('has_custom_title', true)
+    @push('meta')
         <title>{{ $pageTitle }} - Abdinara.id</title>
+        <meta name="title" content="{{ $pageTitle }} - Abdinara.id">
         <meta name="description" content="{{ $pageDesc }}">
         <meta name="keywords" content="soal {{ strtolower($subtopic->name) }}, contoh soal {{ strtolower($category->name) }}, pembahasan soal cpns, kedinasan 2026, abdinara">
-        <link rel="canonical" href="{{ url('/latihan-soal/' . $catSlug . '/' . $subSlug) }}">
+        <link rel="canonical" href="https://cat.abdinara.id/latihan-soal/{{ $catSlug }}/{{ $subSlug }}">
 
         <!-- OpenGraph & Twitter Cards for Social Media Sharing -->
         <meta property="og:title" content="{{ $pageTitle }}">
         <meta property="og:description" content="{{ $pageDesc }}">
-        <meta property="og:url" content="{{ url('/latihan-soal/' . $catSlug . '/' . $subSlug) }}">
+        <meta property="og:url" content="https://cat.abdinara.id/latihan-soal/{{ $catSlug }}/{{ $subSlug }}">
         <meta property="og:type" content="article">
 
         <!-- Google Schema.org JSON-LD FAQPage for Google Rich Snippets -->
