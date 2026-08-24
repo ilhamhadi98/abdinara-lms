@@ -44,21 +44,35 @@
 
             <!-- Big Room Code Box -->
             <div class="card border-0 bg-primary bg-opacity-10 rounded-4 p-4 mb-4 text-center">
-                <small class="text-uppercase fw-bold text-primary mb-1 d-block" style="letter-spacing: 2px;">KODE ROOM DUEL</small>
-                <div class="display-4 fw-bolder text-primary mb-3 font-monospace" style="letter-spacing: 4px;" id="roomCodeText">
-                    {{ $battle->room_code }}
+                <small class="text-uppercase fw-bold text-primary mb-2 d-block" style="letter-spacing: 2px;">KODE ROOM DUEL</small>
+                
+                <div class="d-inline-flex align-items-center justify-content-center gap-3 bg-body border border-primary border-opacity-25 rounded-pill px-4 py-2 mb-3 mx-auto shadow-sm cursor-pointer"
+                     onclick="copyRoomCode('{{ $battle->room_code }}', document.getElementById('btnCopyCode'))"
+                     style="cursor: pointer; max-width: 340px;"
+                     title="Klik untuk salin kode room">
+                    <span class="display-5 fw-bolder text-primary font-monospace" style="letter-spacing: 4px;" id="roomCodeText">
+                        {{ $battle->room_code }}
+                    </span>
+                    <button type="button" class="btn btn-sm btn-primary rounded-circle p-2 d-flex align-items-center justify-content-center shadow-sm" style="width: 36px; height: 36px;">
+                        <i class="bi bi-copy fs-6" id="roomCodeInlineIcon"></i>
+                    </button>
+                </div>
+
+                <!-- Toast feedback alert -->
+                <div id="copyAlertToast" class="d-none alert alert-success py-1 px-3 rounded-pill d-inline-flex align-items-center gap-1 mx-auto mb-3 small fw-bold">
+                    <i class="bi bi-check-circle-fill"></i> Kode room berhasil disalin!
                 </div>
 
                 <div class="d-flex flex-wrap justify-content-center gap-2">
-                    <button type="button" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm" onclick="copyRoomCode('{{ $battle->room_code }}')">
-                        <i class="bi bi-clipboard me-1"></i> Salin Kode
+                    <button type="button" id="btnCopyCode" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm d-flex align-items-center gap-2" onclick="copyRoomCode('{{ $battle->room_code }}', this)">
+                        <i class="bi bi-copy"></i> <span>Salin Kode Room</span>
                     </button>
-                    <button type="button" class="btn btn-outline-primary rounded-pill px-4 fw-bold" onclick="copyRoomLink('{{ route('battle.join.direct', $battle->room_code) }}')">
-                        <i class="bi bi-link-45deg me-1"></i> Salin Tautan
+                    <button type="button" id="btnCopyLink" class="btn btn-outline-primary rounded-pill px-4 fw-bold d-flex align-items-center gap-2" onclick="copyRoomLink('{{ route('battle.join.direct', $battle->room_code) }}', this)">
+                        <i class="bi bi-link-45deg"></i> <span>Salin Tautan</span>
                     </button>
                     <a href="https://api.whatsapp.com/send?text={{ urlencode('Ayo tanding duel cepat soal CAT SKD bersamaku di Abdinara! Masuk dengan kode room: ' . $battle->room_code . ' atau klik link berikut: ' . route('battle.join.direct', $battle->room_code)) }}" 
-                       target="_blank" class="btn btn-success rounded-pill px-4 fw-bold shadow-sm">
-                        <i class="bi bi-whatsapp me-1"></i> Bagikan WA
+                       target="_blank" class="btn btn-success rounded-pill px-4 fw-bold shadow-sm d-flex align-items-center gap-2">
+                        <i class="bi bi-whatsapp"></i> <span>Bagikan WA</span>
                     </a>
                 </div>
             </div>
@@ -286,14 +300,51 @@
     @endif
 
     <script>
-        function copyRoomCode(code) {
+        function copyRoomCode(code, btn) {
             navigator.clipboard.writeText(code).then(() => {
-                alert('Kode room (' + code + ') berhasil disalin ke clipboard!');
+                const toast = document.getElementById('copyAlertToast');
+                if (toast) {
+                    toast.classList.remove('d-none');
+                    setTimeout(() => toast.classList.add('d-none'), 2500);
+                }
+                const inlineIcon = document.getElementById('roomCodeInlineIcon');
+                if (inlineIcon) {
+                    inlineIcon.className = 'bi bi-check2-circle fs-6 text-success';
+                    setTimeout(() => {
+                        inlineIcon.className = 'bi bi-copy fs-6';
+                    }, 2500);
+                }
+                if (btn) {
+                    const original = btn.innerHTML;
+                    btn.innerHTML = '<i class="bi bi-check2"></i> <span>Tersalin!</span>';
+                    btn.classList.add('btn-success');
+                    btn.classList.remove('btn-primary');
+                    setTimeout(() => {
+                        btn.innerHTML = original;
+                        btn.classList.remove('btn-success');
+                        btn.classList.add('btn-primary');
+                    }, 2500);
+                }
+            }).catch(() => {
+                prompt('Salin kode room:', code);
             });
         }
-        function copyRoomLink(link) {
+
+        function copyRoomLink(link, btn) {
             navigator.clipboard.writeText(link).then(() => {
-                alert('Tautan duel berhasil disalin ke clipboard!');
+                if (btn) {
+                    const original = btn.innerHTML;
+                    btn.innerHTML = '<i class="bi bi-check2"></i> <span>Tautan Tersalin!</span>';
+                    btn.classList.add('btn-success', 'text-white');
+                    btn.classList.remove('btn-outline-primary');
+                    setTimeout(() => {
+                        btn.innerHTML = original;
+                        btn.classList.remove('btn-success', 'text-white');
+                        btn.classList.add('btn-outline-primary');
+                    }, 2500);
+                }
+            }).catch(() => {
+                prompt('Salin tautan duel:', link);
             });
         }
     </script>
