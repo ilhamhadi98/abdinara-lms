@@ -28,6 +28,11 @@
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
+    <!-- KaTeX Math Rendering Support -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+
     @livewireStyles
     <link rel="stylesheet" href="{{ asset('css/dark-mode-patch.css') }}">
     @stack('styles')
@@ -84,10 +89,41 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/service-worker.js')
-                .catch(err => console.warn('SW:', err));
+        function triggerKaTeX(root = document.body) {
+            if (window.renderMathInElement) {
+                window.renderMathInElement(root, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\[', right: '\\]', display: true},
+                        {left: '\\(', right: '\\)', display: false},
+                        {left: '$', right: '$', display: false}
+                    ],
+                    throwOnError: false,
+                    ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code", "option"]
+                });
+            }
         }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => triggerKaTeX(), 150);
+        });
+
+        document.addEventListener('livewire:initialized', () => {
+            if (window.Livewire) {
+                Livewire.hook('morph.updated', ({ el, component }) => {
+                    setTimeout(() => triggerKaTeX(el), 50);
+                });
+                Livewire.hook('commit', ({ component, succeed, fail, respond }) => {
+                    succeed(() => {
+                        setTimeout(() => triggerKaTeX(), 50);
+                    });
+                });
+            }
+        });
+
+        document.addEventListener('livewire:navigated', () => {
+            setTimeout(() => triggerKaTeX(), 150);
+        });
     </script>
 
     @stack('scripts')
