@@ -414,6 +414,95 @@ body.lms-body {
     color: #3b82f6;
 }
 
+/* User Profile Button in Navbar */
+.user-profile-btn {
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    color: #1e293b;
+    transition: all 0.2s ease;
+}
+
+.user-profile-btn:hover,
+.user-profile-btn:focus,
+.user-profile-btn[aria-expanded="true"] {
+    background: #e2e8f0;
+    border-color: #94a3b8;
+    color: #0f172a;
+}
+
+.user-profile-btn .user-name-text {
+    color: #1e293b !important;
+}
+
+[data-bs-theme="dark"] .user-profile-btn {
+    background: #1e293b;
+    border-color: #334155;
+    color: #f1f5f9;
+}
+
+[data-bs-theme="dark"] .user-profile-btn:hover,
+[data-bs-theme="dark"] .user-profile-btn:focus,
+[data-bs-theme="dark"] .user-profile-btn[aria-expanded="true"] {
+    background: #334155;
+    border-color: #475569;
+    color: #ffffff;
+}
+
+[data-bs-theme="dark"] .user-profile-btn .user-name-text {
+    color: #f1f5f9 !important;
+}
+
+/* Gamer Stat Boxes on Results Dashboard */
+.gamer-stat-box {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(4px);
+}
+
+.gamer-stat-label {
+    color: #475569;
+    font-weight: 700;
+}
+
+.gamer-stat-sub {
+    color: #64748b;
+}
+
+[data-bs-theme="dark"] .gamer-stat-box {
+    background: rgba(15, 23, 42, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+[data-bs-theme="dark"] .gamer-stat-label {
+    color: #e2e8f0;
+}
+
+[data-bs-theme="dark"] .gamer-stat-sub {
+    color: #94a3b8;
+}
+
+/* Dark Mode Dropdowns & Offcanvas */
+[data-bs-theme="dark"] .dropdown-menu {
+    background-color: #1e293b !important;
+    border: 1px solid #334155 !important;
+    color: #f1f5f9 !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5) !important;
+}
+
+[data-bs-theme="dark"] .dropdown-menu .dropdown-item {
+    color: #cbd5e1 !important;
+}
+
+[data-bs-theme="dark"] .dropdown-menu .dropdown-item:hover,
+[data-bs-theme="dark"] .dropdown-menu .dropdown-item:focus {
+    background-color: #334155 !important;
+    color: #ffffff !important;
+}
+
+[data-bs-theme="dark"] .dropdown-menu .dropdown-divider {
+    border-color: #334155 !important;
+}
+
 /* Activity Map Variables */
 :root {
     --activity-bg: #f8fafc;

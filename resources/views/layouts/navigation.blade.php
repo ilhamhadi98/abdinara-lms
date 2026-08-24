@@ -72,12 +72,12 @@
             @auth
                 {{-- User Profile Dropdown on Desktop --}}
                 <div class="dropdown">
-                    <button class="btn btn-light border d-flex align-items-center gap-2 py-1 px-3 rounded-pill shadow-sm dropdown-toggle" 
+                    <button class="btn user-profile-btn d-flex align-items-center gap-2 py-1 px-3 rounded-pill shadow-sm dropdown-toggle" 
                             type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold" style="width: 28px; height: 28px; font-size: 13px;">
                             {{ substr(Auth::user()->name, 0, 1) }}
                         </div>
-                        <span class="fw-bold text-body" style="font-size: 0.88rem; max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                        <span class="fw-bold user-name-text" style="font-size: 0.88rem; max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                             {{ Auth::user()->name }}
                         </span>
                     </button>

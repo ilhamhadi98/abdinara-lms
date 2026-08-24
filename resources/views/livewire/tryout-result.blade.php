@@ -56,31 +56,31 @@
                 <div class="col-lg-5">
                     <div class="row g-2">
                         <div class="col-6">
-                            <div class="card border-0 rounded-3 p-3 text-dark text-center shadow-sm" style="background: rgba(255, 255, 255, 0.92);">
-                                <small class="text-secondary fw-bold d-block">Simulasi Tryout</small>
+                            <div class="gamer-stat-box rounded-4 p-3 text-center shadow-sm h-100 d-flex flex-column justify-content-center">
+                                <small class="gamer-stat-label d-block">Simulasi Tryout</small>
                                 <h3 class="fw-bolder text-primary mb-0 mt-1">{{ $totalTryouts }}</h3>
-                                <small class="text-muted" style="font-size: 11px;">Rerata: {{ $avgScore }} poin</small>
+                                <small class="gamer-stat-sub" style="font-size: 11px;">Rerata: {{ $avgScore }} poin</small>
                             </div>
                         </div>
                         <div class="col-6">
-                            <div class="card border-0 rounded-3 p-3 text-dark text-center shadow-sm" style="background: rgba(255, 255, 255, 0.92);">
-                                <small class="text-secondary fw-bold d-block">Win Rate Duel 1v1</small>
+                            <div class="gamer-stat-box rounded-4 p-3 text-center shadow-sm h-100 d-flex flex-column justify-content-center">
+                                <small class="gamer-stat-label d-block">Win Rate Duel 1v1</small>
                                 <h3 class="fw-bolder text-danger mb-0 mt-1">{{ $battleWinRate }}%</h3>
-                                <small class="text-muted" style="font-size: 11px;">{{ $totalBattleWins }} Menang / {{ $totalBattles }} Duel</small>
+                                <small class="gamer-stat-sub" style="font-size: 11px;">{{ $totalBattleWins }} Menang / {{ $totalBattles }} Duel</small>
                             </div>
                         </div>
                         <div class="col-6">
-                            <div class="card border-0 rounded-3 p-3 text-dark text-center shadow-sm" style="background: rgba(255, 255, 255, 0.92);">
-                                <small class="text-secondary fw-bold d-block">Liga Nasional</small>
+                            <div class="gamer-stat-box rounded-4 p-3 text-center shadow-sm h-100 d-flex flex-column justify-content-center">
+                                <small class="gamer-stat-label d-block">Liga Nasional</small>
                                 <h3 class="fw-bolder text-warning mb-0 mt-1">{{ $totalTournaments }}x</h3>
-                                <small class="text-muted" style="font-size: 11px;">Peringkat Terbaik: {{ $bestRank ? '#'.$bestRank : '-' }}</small>
+                                <small class="gamer-stat-sub" style="font-size: 11px;">Peringkat Terbaik: {{ $bestRank ? '#'.$bestRank : '-' }}</small>
                             </div>
                         </div>
                         <div class="col-6">
-                            <div class="card border-0 rounded-3 p-3 text-dark text-center shadow-sm" style="background: rgba(255, 255, 255, 0.92);">
-                                <small class="text-secondary fw-bold d-block">Akurasi Soal</small>
+                            <div class="gamer-stat-box rounded-4 p-3 text-center shadow-sm h-100 d-flex flex-column justify-content-center">
+                                <small class="gamer-stat-label d-block">Akurasi Soal</small>
                                 <h3 class="fw-bolder text-success mb-0 mt-1">{{ $overallAccuracy }}%</h3>
-                                <small class="text-muted" style="font-size: 11px;">{{ $totalAnswered }} Soal Terjawab</small>
+                                <small class="gamer-stat-sub" style="font-size: 11px;">{{ $totalAnswered }} Soal Terjawab</small>
                             </div>
                         </div>
                     </div>
