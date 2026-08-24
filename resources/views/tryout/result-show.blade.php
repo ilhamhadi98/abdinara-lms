@@ -66,6 +66,160 @@
                     </div>
                 </div>
 
+                {{-- AI Diagnostic & Radar Kelemahan Card --}}
+                <div class="card border-0 shadow-sm rounded-4 mb-5 overflow-hidden">
+                    <div class="card-header bg-transparent border-bottom p-4 d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="badge bg-primary bg-opacity-10 text-primary p-2 rounded-3 fs-6">
+                                <i class="bi bi-cpu-fill"></i>
+                            </span>
+                            <div>
+                                <h5 class="fw-bold text-body mb-0">Analisis Cerdas & Radar Materi AI</h5>
+                                <small class="text-secondary">Evaluasi penguasaan materi & prediksi kelulusan</small>
+                            </div>
+                        </div>
+                        <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-3 py-2 rounded-pill fw-bold">
+                            <i class="bi bi-patch-check-fill me-1"></i> AI Diagnostik
+                        </span>
+                    </div>
+
+                    <div class="card-body p-4 p-md-5">
+                        <div class="row align-items-center g-4">
+                            <!-- Radar Chart -->
+                            <div class="col-lg-6">
+                                <div class="text-center mb-2">
+                                    <h6 class="fw-bold text-body mb-1">Peta Radar Penguasaan Materi</h6>
+                                    <small class="text-secondary">Persentase akurasi jawaban per subtopik</small>
+                                </div>
+                                <div style="position: relative; height: 280px; width: 100%;">
+                                    <canvas id="radarChart"></canvas>
+                                </div>
+                            </div>
+
+                            <!-- Diagnostic Insights & Probability -->
+                            <div class="col-lg-6">
+                                <!-- Peluang Lolos Box -->
+                                <div class="p-3 rounded-4 bg-body-tertiary border mb-3 d-flex align-items-center justify-content-between">
+                                    <div>
+                                        <small class="text-secondary fw-semibold text-uppercase tracking-wider">Estimasi Peluang Lolos:</small>
+                                        <h4 class="fw-bolder text-primary mb-0">{{ $passingProbability }}%</h4>
+                                        <small class="text-secondary">Berdasarkan passing grade SKD</small>
+                                    </div>
+                                    <div class="p-3 rounded-circle bg-primary bg-opacity-10 text-primary fs-3">
+                                        <i class="bi bi-graph-up-arrow"></i>
+                                    </div>
+                                </div>
+
+                                <!-- Strengths -->
+                                @if (!empty($strengths))
+                                    <div class="mb-3">
+                                        <small class="text-success fw-bold text-uppercase d-flex align-items-center gap-1 mb-1">
+                                            <i class="bi bi-trophy-fill"></i> Kekuatan Utama:
+                                        </small>
+                                        <div class="d-flex flex-wrap gap-2">
+                                            @foreach ($strengths as $st)
+                                                <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-3 py-2 rounded-pill small">
+                                                    {{ $st['name'] }} ({{ $st['accuracy'] }}%)
+                                                </span>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endif
+
+                                <!-- Weaknesses -->
+                                @if (!empty($weaknesses))
+                                    <div class="mb-4">
+                                        <small class="text-danger fw-bold text-uppercase d-flex align-items-center gap-1 mb-1">
+                                            <i class="bi bi-exclamation-triangle-fill"></i> Perlu Ditingkatkan:
+                                        </small>
+                                        <div class="d-flex flex-wrap gap-2">
+                                            @foreach ($weaknesses as $wk)
+                                                <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 px-3 py-2 rounded-pill small">
+                                                    {{ $wk['name'] }} ({{ $wk['accuracy'] }}%)
+                                                </span>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endif
+
+                                <!-- Viral Share & Download Story Buttons -->
+                                <div class="d-flex flex-column gap-2 pt-2 border-top">
+                                    <button type="button" id="btnDownloadStory" onclick="generateStoryCard()" class="btn btn-warning text-dark fw-bold rounded-pill shadow-sm py-2 d-flex align-items-center justify-content-center gap-2">
+                                        <i class="bi bi-camera-fill"></i> Unduh Kartu Story (IG/WA 9:16)
+                                    </button>
+
+                                    @php
+                                        $waText = urlencode("Alhamdulillah! Saya baru saja menyelesaikan {$session->tryout->title} di Abdinara.id dengan skor {$session->score}! Yuk uji kemampuan CAT kamu juga di https://cat.abdinara.id");
+                                    @endphp
+                                    <a href="https://api.whatsapp.com/send?text={{ $waText }}" target="_blank" class="btn btn-outline-success fw-bold rounded-pill py-2 d-flex align-items-center justify-content-center gap-2">
+                                        <i class="bi bi-whatsapp"></i> Bagikan Hasil ke WhatsApp
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Hidden 9:16 Story Card Element for Export (1080x1920) --}}
+                <div style="position: absolute; left: -9999px; top: -9999px;">
+                    <div id="storyCard" style="width: 540px; height: 960px; background: linear-gradient(145deg, #0a2647 0%, #144272 50%, #0d1b2a 100%); color: #ffffff; padding: 40px; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; display: flex; flex-direction: column; justify-content: space-between; border-radius: 0; box-sizing: border-box;">
+                        <!-- Header -->
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <img src="{{ asset('icon-192.png') }}" style="height: 48px; width: 48px; border-radius: 12px;" onerror="this.src='{{ asset('favicon.ico') }}'">
+                                <div>
+                                    <h3 style="margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.5px; color: #ffffff;">
+                                        Abdi<span style="color: #d4af37;">nara</span>.id
+                                    </h3>
+                                    <p style="margin: 0; font-size: 11px; opacity: 0.75; text-transform: uppercase; letter-spacing: 1px;">LMS Portal Resmi CAT</p>
+                                </div>
+                            </div>
+                            <span style="background: rgba(212, 175, 55, 0.2); border: 1px solid #d4af37; color: #d4af37; padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase;">
+                                Hasil Simulasi
+                            </span>
+                        </div>
+
+                        <!-- User & Score Section -->
+                        <div style="background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 24px; padding: 28px; text-align: center; margin: 20px 0;">
+                            <p style="margin: 0 0 6px 0; font-size: 15px; font-weight: 600; color: #d4af37; text-transform: uppercase; letter-spacing: 1px;">{{ $session->user->name ?? Auth::user()->name }}</p>
+                            <h4 style="margin: 0 0 16px 0; font-size: 18px; font-weight: 700; color: #ffffff;">{{ $session->tryout->title }}</h4>
+
+                            <div style="font-size: 72px; font-weight: 900; line-height: 1; color: {{ $isPassed ? '#4ade80' : '#f87171' }}; margin-bottom: 10px;">
+                                {{ $session->score }}
+                            </div>
+                            <p style="margin: 0 0 16px 0; font-size: 14px; opacity: 0.8;">dari {{ $session->tryout->total_questions }} butir soal ({{ $pct }}%)</p>
+
+                            <div style="display: inline-block; background: {{ $isPassed ? 'rgba(74, 222, 128, 0.2)' : 'rgba(248, 113, 113, 0.2)' }}; border: 1px solid {{ $isPassed ? '#4ade80' : '#f87171' }}; color: {{ $isPassed ? '#4ade80' : '#f87171' }}; padding: 8px 24px; border-radius: 30px; font-size: 14px; font-weight: 800;">
+                                {{ $statusText }}
+                            </div>
+                        </div>
+
+                        <!-- Highlights & Stats -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;">
+                            <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 14px; text-align: center;">
+                                <p style="margin: 0; font-size: 11px; opacity: 0.75; text-transform: uppercase;">Peluang Lolos</p>
+                                <h3 style="margin: 4px 0 0 0; font-size: 24px; font-weight: 800; color: #38bdf8;">{{ $passingProbability }}%</h3>
+                            </div>
+                            <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 14px; text-align: center;">
+                                <p style="margin: 0; font-size: 11px; opacity: 0.75; text-transform: uppercase;">Waktu Pengerjaan</p>
+                                <h3 style="margin: 4px 0 0 0; font-size: 20px; font-weight: 800; color: #ffffff;">
+                                    @if ($session->duration_seconds !== null)
+                                        {{ floor($session->duration_seconds / 60) }}m {{ $session->duration_seconds % 60 }}s
+                                    @else
+                                        -
+                                    @endif
+                                </h3>
+                            </div>
+                        </div>
+
+                        <!-- Footer -->
+                        <div style="text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.15); padding-top: 16px;">
+                            <p style="margin: 0 0 4px 0; font-size: 13px; font-weight: 700; color: #d4af37;">Wujudkan Impian Lolos Seleksi CPNS & Kedinasan</p>
+                            <p style="margin: 0; font-size: 11px; opacity: 0.7;">Ikuti simulasi CAT online gratis di <strong>cat.abdinara.id</strong></p>
+                        </div>
+                    </div>
+                </div>
+
                 {{-- Answer Review Cards --}}
                 <div class="mb-4">
                     <h5 class="mb-4 fw-bold text-body d-flex align-items-center gap-2">
@@ -204,4 +358,90 @@
             </div>
         </div>
     </div>
+
+    @push('scripts')
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const ctx = document.getElementById('radarChart');
+                if (ctx) {
+                    const isDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
+                    const gridColor = isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.1)';
+                    const textColor = isDark ? '#cbd5e1' : '#475569';
+
+                    new Chart(ctx, {
+                        type: 'radar',
+                        data: {
+                            labels: {!! json_encode($radarLabels) !!},
+                            datasets: [{
+                                label: 'Akurasi Penguasaan (%)',
+                                data: {!! json_encode($radarData) !!},
+                                fill: true,
+                                backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                                borderColor: '#3b82f6',
+                                pointBackgroundColor: '#3b82f6',
+                                pointBorderColor: '#fff',
+                                pointHoverBackgroundColor: '#fff',
+                                pointHoverBorderColor: '#3b82f6',
+                                borderWidth: 2,
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                r: {
+                                    angleLines: { color: gridColor },
+                                    grid: { color: gridColor },
+                                    pointLabels: {
+                                        color: textColor,
+                                        font: { size: 11, weight: '600' }
+                                    },
+                                    suggestedMin: 0,
+                                    suggestedMax: 100,
+                                    ticks: {
+                                        stepSize: 20,
+                                        display: false
+                                    }
+                                }
+                            },
+                            plugins: {
+                                legend: { display: false }
+                            }
+                        }
+                    });
+                }
+            });
+
+            function generateStoryCard() {
+                const btn = document.getElementById('btnDownloadStory');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Membuat Gambar...';
+                btn.disabled = true;
+
+                const card = document.getElementById('storyCard');
+
+                html2canvas(card, {
+                    scale: 2,
+                    useCORS: true,
+                    allowTaint: true,
+                    backgroundColor: '#0a2647'
+                }).then(canvas => {
+                    const link = document.createElement('a');
+                    link.download = 'Story-Hasil-Tryout-{{ $session->id }}.png';
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }).catch(err => {
+                    console.error(err);
+                    alert('Gagal membuat gambar Story. Silakan coba lagi.');
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                });
+            }
+        </script>
+    @endpush
 </x-app-layout>

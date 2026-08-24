@@ -15,6 +15,8 @@
             <nav class="main-nav">
                 <a href="#beranda">Beranda</a>
                 <a href="{{ route('practice.index') }}">Latihan Soal</a>
+                <a href="{{ route('tournament.index') }}">🏆 Liga Tryout</a>
+                <a href="{{ route('battle.index') }}">⚔️ Duel 1 vs 1</a>
                 <a href="#tentang">Tentang</a>
                 <a href="#program">Program</a>
                 <a href="#keunggulan">Keunggulan</a>

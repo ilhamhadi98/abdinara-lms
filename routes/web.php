@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\BattleController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicPracticeController;
 use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\TournamentController;
 use App\Http\Controllers\TryoutSessionController;
 use App\Livewire\TryoutEngine;
 use App\Livewire\TryoutList;
@@ -18,6 +20,20 @@ Route::get('/latihan-soal', [PublicPracticeController::class, 'index'])->name('p
 Route::get('/latihan-soal/{categorySlug}', [PublicPracticeController::class, 'category'])->name('practice.category');
 Route::get('/latihan-soal/{categorySlug}/{subtopicSlug}', [PublicPracticeController::class, 'subtopic'])->name('practice.subtopic');
 Route::get('/sitemap.xml', [PublicPracticeController::class, 'sitemap'])->name('sitemap');
+
+// Liga Tryout Mingguan (National Weekly Tournament)
+Route::get('/liga-tryout', [TournamentController::class, 'index'])->name('tournament.index');
+Route::get('/liga-tryout/certificate/{participant}', [TournamentController::class, 'certificate'])->name('tournament.certificate')->middleware('auth');
+
+// CAT Battle 1 vs 1 (Mode Duel Real-Time)
+Route::middleware('auth')->group(function () {
+    Route::get('/battle', [BattleController::class, 'index'])->name('battle.index');
+    Route::post('/battle/create', [BattleController::class, 'createRoom'])->name('battle.create');
+    Route::post('/battle/join', [BattleController::class, 'joinRoom'])->name('battle.join');
+    Route::get('/battle/join/{roomCode}', [BattleController::class, 'joinDirect'])->name('battle.join.direct');
+    Route::get('/battle/quick', [BattleController::class, 'quickMatch'])->name('battle.quick');
+    Route::get('/battle/arena/{battle}', [BattleController::class, 'arena'])->name('battle.arena');
+});
 
 Route::get('/dashboard', function () {
     $user = Illuminate\Support\Facades\Auth::user();
