@@ -94,15 +94,13 @@
                         <button type="button" 
                                 wire:click="selectAnswer('{{ $opt }}')"
                                 @if ($isAnswered) disabled @endif
-                                class="btn text-start p-3 rounded-3 border d-flex align-items-start gap-3 transition-all
+                                class="btn battle-option-btn text-start p-3 rounded-3 d-flex align-items-start gap-3
                                     @if ($isAnswered && $opt === $lastCorrectAnswer)
-                                        border-success bg-success bg-opacity-10 text-success fw-bold
+                                        opt-correct
                                     @elseif ($isAnswered && $selectedOption === $opt && $opt !== $lastCorrectAnswer)
-                                        border-danger bg-danger bg-opacity-10 text-danger
+                                        opt-wrong
                                     @elseif ($isAnswered)
-                                        btn-light opacity-50
-                                    @else
-                                        btn-light text-body border-light hover-primary
+                                        opt-muted
                                     @endif">
                             <span class="badge rounded-circle d-flex align-items-center justify-content-center fw-bold mt-1
                                 @if ($isAnswered && $opt === $lastCorrectAnswer)

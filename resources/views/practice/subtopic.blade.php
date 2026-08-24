@@ -151,12 +151,11 @@
                                     @if ($optText)
                                         <button type="button" 
                                                 @click="choose('{{ $opt }}')"
-                                                class="btn text-start p-3 rounded-3 border d-flex align-items-start gap-3 transition-all"
+                                                class="btn practice-option-btn text-start p-3 rounded-3 d-flex align-items-start gap-3"
                                                 :class="{
-                                                    'btn-light text-body border-light': !revealed,
-                                                    'border-success bg-success bg-opacity-10 text-success fw-bold': revealed && ('{{ $opt }}' === correct),
-                                                    'border-danger bg-danger bg-opacity-10 text-danger': revealed && (selected === '{{ $opt }}' && selected !== correct),
-                                                    'btn-light opacity-50': revealed && ('{{ $opt }}' !== correct && selected !== '{{ $opt }}')
+                                                    'opt-correct': revealed && ('{{ $opt }}' === correct),
+                                                    'opt-wrong': revealed && (selected === '{{ $opt }}' && selected !== correct),
+                                                    'opt-muted': revealed && ('{{ $opt }}' !== correct && selected !== '{{ $opt }}')
                                                 }">
                                             <span class="badge rounded-circle d-flex align-items-center justify-content-center fw-bold mt-1"
                                                   :class="{
