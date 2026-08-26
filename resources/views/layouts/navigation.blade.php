@@ -1,6 +1,9 @@
 <nav x-data="{ open: false }" class="dash-nav">
     <div class="container dash-nav-wrap">
-        <a class="brand" href="{{ Auth::check() ? route('dashboard') : url('/') }}">Abdi<span>nara</span>.id</a>
+        <a class="brand d-flex align-items-center gap-2" href="{{ Auth::check() ? route('dashboard') : url('/') }}">
+            <img src="{{ asset('images/logo-icon.svg') }}" alt="Abdinara Logo" style="height: 28px; width: 28px;">
+            <span>Abdi<span style="color: var(--gold-500);">nara</span>.id</span>
+        </a>
 
         <div class="dash-nav-links">
             @auth
