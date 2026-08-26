@@ -48,7 +48,7 @@
                 <!-- Modern Logo / Text with glowing effect -->
                 <a href="{{ url('/') }}"
                     class="inline-flex items-center gap-3 mb-14 drop-shadow-md hover:scale-[1.02] transition-transform duration-300">
-                    <img src="{{ asset('images/logo-icon.svg') }}" alt="Abdinara Logo" class="w-10 h-10">
+                    <img src="{{ asset('icon-192.png') }}" alt="Abdinara Logo" class="w-10 h-10 rounded-full">
                     <span class="text-4xl font-extrabold tracking-tight text-white">
                         Abdi<span class="text-[#d4af37]">nara</span><span
                             class="text-blue-200/90 font-semibold">.id</span>

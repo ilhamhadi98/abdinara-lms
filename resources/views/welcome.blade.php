@@ -138,7 +138,7 @@
     <header class="site-header sticky-top bg-white border-bottom shadow-sm">
         <div class="container py-2 d-flex align-items-center justify-content-between">
             <a class="brand text-decoration-none d-flex align-items-center gap-2" href="{{ url('/') }}">
-                <img src="{{ asset('images/logo-icon.svg') }}" alt="Abdinara Logo" style="height: 32px; width: 32px;">
+                <img src="{{ asset('icon-192.png') }}" alt="Abdinara Logo" style="height: 32px; width: 32px;" class="rounded-circle">
                 <span class="fs-4 fw-bold text-dark">Abdi<span class="text-warning">nara</span><span class="text-primary fs-6">.id</span></span>
             </a>
 
